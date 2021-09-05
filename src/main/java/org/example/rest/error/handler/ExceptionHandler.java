@@ -4,6 +4,7 @@ import org.example.rest.error.ResponseGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
@@ -19,6 +20,9 @@ public class ExceptionHandler implements ExceptionMapper<Exception>, ResponseGen
     public Response toResponse(Exception e) {
         LOGGER.error("Error occurred!");
         e.printStackTrace();
+        if (e instanceof WebApplicationException) {
+            return ((WebApplicationException) e).getResponse();
+        }
         //don't return details to external requester
         return genericResponse(Response.Status.INTERNAL_SERVER_ERROR, INTERNAL_ERROR);
     }
