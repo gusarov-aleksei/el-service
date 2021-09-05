@@ -2,30 +2,26 @@ package org.example.service;
 
 import org.example.esl.EnglishContent;
 import org.example.esl.EnglishContentExtractor;
-import org.example.esl.EnglishContentExtractorImpl;
 import org.example.file.FileOps;
+import org.example.pdf.PdfAdapter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.io.IOException;
 import java.util.Optional;
 
-import org.example.pdf.PdfAdapter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /**
  * Class with main logic called from http endpoint or by schedule
  */
 @Singleton
-public class EnglishContentService {
+public class EnglishContentService implements FileOps {
 
     private Logger LOGGER = LoggerFactory.getLogger(EnglishContentService.class);
 
     @Inject
     SourceConfig config;
-
-    private FileOps fileOps = new FileOps();
 
     private PdfAdapter pdfAdapter = new PdfAdapter();
     @Inject
@@ -39,7 +35,7 @@ public class EnglishContentService {
     public String[] listDocumentNames()  {
         try {
             LOGGER.info("Request for files '{}' listing in directory {}", config.extension(), config.directory());
-            return fileOps.getFiles(config.directory(), config.extension());
+            return getFiles(config.directory(), config.extension());
         } catch (IOException e) {
             LOGGER.error("Error while file listing!");
             throw new RuntimeException(e);

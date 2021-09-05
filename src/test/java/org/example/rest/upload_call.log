@@ -1,0 +1,20 @@
+POST /files_multi HTTP/1.1
+User-Agent: PostmanRuntime/7.28.4
+Accept: */*
+Postman-Token: 44a9347b-225c-47bb-b1d3-3bcf5962925b
+Host: localhost:8181
+Accept-Encoding: gzip, deflate, br
+Connection: keep-alive
+Content-Type: multipart/form-data; boundary=--------------------------517525928422471348690723
+Content-Length: 1660
+
+----------------------------517525928422471348690723
+Content-Disposition: form-data; name="file"; filename="errors.txt"
+<errors.txt>
+----------------------------517525928422471348690723--
+
+HTTP/1.1 200 OK
+Content-Length: 14
+Content-Type: application/json
+
+["errors.txt"]
