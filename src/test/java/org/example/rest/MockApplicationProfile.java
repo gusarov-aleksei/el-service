@@ -10,6 +10,9 @@ import java.util.Map;
 import static io.quarkus.runtime.configuration.ProfileManager.getActiveProfile;
 import static org.eclipse.microprofile.config.ConfigProvider.getConfig;
 
+/**
+ * Quarkus test profile used in unit-test with QuarkusTest annotation.
+ */
 public class MockApplicationProfile implements QuarkusTestProfile {
 
     private Logger LOGGER = LoggerFactory.getLogger(MockApplicationProfile.class);
@@ -23,8 +26,8 @@ public class MockApplicationProfile implements QuarkusTestProfile {
         LOGGER.info("testing.relative-dir is {}", relativeDir);
         var absolutePath = getClass().getClassLoader().getResource(relativeDir).getPath();
         LOGGER.info("storage.source.directory will be set to {}", absolutePath);
+        //expected 'absolutePath' would be something like 'target/test-classes/pdf' - all compiled test classes are put into 'target/test-classes'
         return Collections.singletonMap("%test.storage.source.directory", absolutePath);
-        //return Collections.emptyMap();
     }
 
     @Override

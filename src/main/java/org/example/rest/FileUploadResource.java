@@ -7,7 +7,6 @@ import org.eclipse.microprofile.openapi.annotations.info.Info;
 import org.example.file.FileOps;
 import org.example.rest.error.ResponseGenerator;
 import org.jboss.resteasy.annotations.providers.multipart.MultipartForm;
-import org.jboss.resteasy.plugins.providers.multipart.InputPart;
 import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,14 +16,8 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Optional;
-
-import static javax.ws.rs.core.HttpHeaders.CONTENT_DISPOSITION;
 
 /**
  * This class contains http endpoints used for file uploading
@@ -35,15 +28,12 @@ import static javax.ws.rs.core.HttpHeaders.CONTENT_DISPOSITION;
                 version = "Initial version")
 )
 @Path("/")
-public class FileUploadResource implements ResponseGenerator, FileOps {
+public class FileUploadResource implements ResponseGenerator, FileOps, FileDataExtractor {
 
     private Logger LOGGER = LoggerFactory.getLogger(FileUploadResource.class);
 
     @ConfigProperty(name = "storage.source.directory")
     String sourceDir;
-    //Content-Disposition literals
-    static final String FILENAME = "filename";
-    static final String FILE = "file";
 
     /**
      * Upload file implementation using in build data class MultipartFormDataInput which describes request data
@@ -64,45 +54,14 @@ public class FileUploadResource implements ResponseGenerator, FileOps {
             LOGGER.debug("file doesn't present in input");
             return Response.serverError().entity("file doesn't present in input").build();
         }
-        var uploadedFileNames = new ArrayList<>();
-        for (var inputPart : request.getFormDataMap().get(FILE)) {
-            var fileName = retrieveFileName(inputPart);
-            if (fileName.isPresent()) {
-                var dataToSave = retrieveDataToSave(inputPart);
-                saveIntoFile(dataToSave, sourceDir + "/" + fileName.get());
-                uploadedFileNames.add(fileName.get());
-                LOGGER.debug("data was written to {}", fileName.get());
-            } else {
-                LOGGER.error("data name not found in request input. input data is not saved");
-            }
+        //decouple and make map of <file_name, byte[]>
+        var fileToBodyMap = retrieveFiles(request.getFormDataMap().get(FILE));
+        for (var nameToBody : fileToBodyMap.entrySet()) {
+            LOGGER.debug("File '{}' is going to be saved into {}", nameToBody.getKey(), sourceDir);
+            saveIntoFile(sourceDir + "/" + nameToBody.getKey(), nameToBody.getValue());
         }
-
-        return Response.ok(uploadedFileNames).build();
-    }
-
-    /**
-     * Retrieves name of file from Content-Disposition header of body prat
-     * (body is split into parts by 'boundary' mark, see example in src/test/java/org/example/rest/upload_call.log )
-     * @param inputPart part of incoming request to retrieve file name from it
-     * @return filename if it was found in inputPart
-     */
-    private Optional<String> retrieveFileName(InputPart inputPart) {
-        MultivaluedMap<String, String> headers = inputPart.getHeaders();
-        var contentDispositions = inputPart.getHeaders().getFirst(CONTENT_DISPOSITION);
-        for (String contentDisposition : contentDispositions.split(";")) {
-            if (contentDisposition.trim().startsWith(FILENAME)) {
-                var delimiter = contentDisposition.indexOf('=');
-                if (delimiter > -1) {
-                    return Optional.of(contentDisposition.substring(delimiter + 1).replaceAll("\"", ""));
-                }
-            }
-        }
-        return Optional.empty();
-    }
-
-    private byte[] retrieveDataToSave(InputPart inputPart) throws IOException {
-        var inputStream = inputPart.getBody(InputStream.class, null);
-        return inputStream.readAllBytes();
+        //return persisted file names
+        return Response.ok(fileToBodyMap.keySet()).build();
     }
 
     /**
@@ -125,7 +84,7 @@ public class FileUploadResource implements ResponseGenerator, FileOps {
             return badFileRequested();
         }
         LOGGER.debug("File '{}' is going to be saved into {}", data.fileName, sourceDir);
-        saveIntoFile(data.file, sourceDir + data.fileName);
+        saveIntoFile(sourceDir + data.fileName, data.file);
         return Response.ok(data.fileName).build();
     }
 }
