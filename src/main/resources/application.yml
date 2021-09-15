@@ -2,6 +2,10 @@ storage:
   source:
     directory: ${LOCAL_SOURCE_DIR}/
     extension: ${FILE_EXT:.pdf}
+  type: ${STORAGE_TYPE:LOCAL}
+  gs:
+    project: ${GCP_PPROJECT:algus-project-382}
+    bucket: ${GCP_EL_BUCKET:algus-bucket}
 
 quarkus:
   log:

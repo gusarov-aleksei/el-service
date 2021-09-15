@@ -3,7 +3,7 @@ package org.example.service;
 import io.smallrye.config.ConfigMapping;
 
 @ConfigMapping(prefix = "storage.source")
-interface  SourceConfig {
+public interface  SourceConfig {
     String directory();
 
     String extension();
