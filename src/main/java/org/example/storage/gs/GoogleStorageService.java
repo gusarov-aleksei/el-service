@@ -2,7 +2,7 @@ package org.example.storage.gs;
 
 import org.example.storage.StorageService;
 
-import java.util.Optional;
+import java.io.FileNotFoundException;
 
 /**
  * Instance of StorageService aimed for using Google Storage cloud service.
@@ -11,6 +11,7 @@ public class GoogleStorageService implements StorageService {
 
     private final GsClient client;
     private final String defaultBucket;
+    static final String NOT_FOUND_PATTERN = "File '%s' not found in bucket '%s'";
 
     public GoogleStorageService(GsClient client, String defaultBucket) {
         this.client = client;
@@ -25,8 +26,10 @@ public class GoogleStorageService implements StorageService {
     }
 
     @Override
-    public Optional<byte[]> readBytesFormFile(String fileName) {
-        return client.downloadObject(defaultBucket, fileName);
+    public byte[] readBytesFormFile(String fileName) throws FileNotFoundException {
+        return client.downloadObject(defaultBucket, fileName)
+                .orElseThrow(
+                        () -> new FileNotFoundException(String.format(NOT_FOUND_PATTERN, fileName, defaultBucket)));
     }
 
     @Override

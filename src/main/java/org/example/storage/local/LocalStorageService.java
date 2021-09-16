@@ -4,7 +4,6 @@ import org.example.file.FileOps;
 import org.example.storage.StorageService;
 
 import java.io.IOException;
-import java.util.Optional;
 
 /**
  * Instance of Storage Service operated with local file system
@@ -23,9 +22,8 @@ public class LocalStorageService implements StorageService, FileOps {
     }
 
     @Override
-    public Optional<byte[]> readBytesFormFile(String fileName) {
-        //TODO to be implemented
-        return Optional.empty();
+    public byte[] readBytesFormFile(String fileName) throws IOException {
+        return readFromFile(sourceDir +fileName);
     }
 
     @Override

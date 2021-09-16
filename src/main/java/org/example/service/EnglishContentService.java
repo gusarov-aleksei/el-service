@@ -4,6 +4,7 @@ import org.example.esl.EnglishContent;
 import org.example.esl.EnglishContentExtractor;
 import org.example.file.FileOps;
 import org.example.pdf.PdfAdapter;
+import org.example.storage.StorageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,6 +24,9 @@ public class EnglishContentService implements FileOps {
     @Inject
     SourceConfig config;
 
+    @Inject
+    StorageService storageService;
+
     private PdfAdapter pdfAdapter = new PdfAdapter();
     @Inject
     EnglishContentExtractor englishContentExtractor;
@@ -35,7 +39,7 @@ public class EnglishContentService implements FileOps {
     public String[] listDocumentNames()  {
         try {
             LOGGER.info("Request for files '{}' listing in directory {}", config.extension(), config.directory());
-            return getFiles(config.directory(), config.extension());
+            return storageService.listFileNames("", config.extension());
         } catch (IOException e) {
             LOGGER.error("Error while file listing!");
             throw new RuntimeException(e);
@@ -48,7 +52,8 @@ public class EnglishContentService implements FileOps {
      * @return structured content extracted from pdf file
      */
     public Optional<EnglishContent> extractContent(String fileName) throws IOException {
-        return pdfAdapter.retrieveTextContent(config.directory() + fileName)
+        LOGGER.info("Content retrieval for file {}", fileName);
+        return pdfAdapter.retrieveTextContent(storageService.readBytesFormFile(fileName))
                 .flatMap(englishContentExtractor::extractEscContent);
     }
 }

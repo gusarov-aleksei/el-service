@@ -1,7 +1,6 @@
 package org.example.storage;
 
 import java.io.IOException;
-import java.util.Optional;
 
 /**
  * Base API for working with Storage (place where blob data is located)
@@ -21,7 +20,7 @@ public interface StorageService {
      * @param fileName name of the file (relative path + file name)
      * @return array of bytes
      */
-    Optional<byte[]> readBytesFormFile(String fileName);
+    byte[] readBytesFormFile(String fileName) throws IOException;
 
     /**
      * Save array of bytes into file with fileName

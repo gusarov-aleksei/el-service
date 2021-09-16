@@ -6,11 +6,13 @@ import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.info.Info;
 import org.example.file.FileOps;
 import org.example.rest.error.ResponseGenerator;
+import org.example.storage.StorageService;
 import org.jboss.resteasy.annotations.providers.multipart.MultipartForm;
 import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -35,6 +37,9 @@ public class FileUploadResource implements ResponseGenerator, FileOps, FileDataE
     @ConfigProperty(name = "storage.source.directory")
     String sourceDir;
 
+    @Inject
+    StorageService storageService;
+
     /**
      * Upload file implementation using in build data class MultipartFormDataInput which describes request data
      * @param request incoming data carrying filename and bytes of file content
@@ -58,7 +63,7 @@ public class FileUploadResource implements ResponseGenerator, FileOps, FileDataE
         var fileToBodyMap = retrieveFiles(request.getFormDataMap().get(FILE));
         for (var nameToBody : fileToBodyMap.entrySet()) {
             LOGGER.debug("File '{}' is going to be saved into {}", nameToBody.getKey(), sourceDir);
-            saveIntoFile(sourceDir + "/" + nameToBody.getKey(), nameToBody.getValue());
+            storageService.writeBytesToFile(nameToBody.getKey(), nameToBody.getValue());
         }
         //return persisted file names
         return Response.ok(fileToBodyMap.keySet()).build();
@@ -84,7 +89,7 @@ public class FileUploadResource implements ResponseGenerator, FileOps, FileDataE
             return badFileRequested();
         }
         LOGGER.debug("File '{}' is going to be saved into {}", data.fileName, sourceDir);
-        saveIntoFile(sourceDir + data.fileName, data.file);
+        storageService.writeBytesToFile(data.fileName, data.file);
         return Response.ok(data.fileName).build();
     }
 }

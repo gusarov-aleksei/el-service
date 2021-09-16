@@ -1,6 +1,7 @@
 package org.example.file;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Arrays;
@@ -40,6 +41,18 @@ public interface FileOps {
         try (var outputStream = new FileOutputStream(absolutePath)){
             //write all bytes directly without buffering for simplicity
             outputStream.write(bytesToSave);
+        }
+    }
+
+    /**
+     * Get file content as array of bytes
+     * @param fileName absolute file path + name
+     * @return content of file
+     * @throws IOException in case of internal error
+     */
+    default byte[] readFromFile(String fileName) throws IOException {
+        try (var inputStream = new FileInputStream(fileName)) {
+            return inputStream.readAllBytes();
         }
     }
 }

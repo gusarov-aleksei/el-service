@@ -1,5 +1,6 @@
 package org.example.pdf;
 
+import org.example.file.FileOps;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -11,7 +12,7 @@ import static org.example.esl.EnglishContentLiterals.CULTURE_NOTE_KEY;
 import static org.example.esl.EnglishContentLiterals.GLOSSARY_KEY;
 import static org.example.esl.EnglishContentLiterals.WHAT_ELSE_KEY;
 
-public class PdfAdapterTest implements ResourceLoader {
+public class PdfAdapterTest implements ResourceLoader, FileOps {
 
     final static String EMPTY_PDF = "pdf/0 empty.pdf";
     final static String EMPTY_ONE_PAGE_PDF = "pdf/1 one page.pdf";
@@ -30,8 +31,8 @@ public class PdfAdapterTest implements ResourceLoader {
      */
     @Test
     public void testReadPdf_shouldReadPdf() throws IOException {
-        var absFilePath = ABSOLUTE_PATH_TO_BASE_DIR + VALID_PDF;
-        var textContent = pdfAdapter.retrieveTextContent(absFilePath);
+        var pdfFileData = readFromFile(ABSOLUTE_PATH_TO_BASE_DIR + VALID_PDF);
+        var textContent = pdfAdapter.retrieveTextContent(pdfFileData);
         assertThat(textContent).isNotEmpty();
         assertThat(textContent.get()).isNotBlank();
         //assert some internal key tokens are in text for pdf with concrete content
@@ -47,7 +48,8 @@ public class PdfAdapterTest implements ResourceLoader {
      */
     @Test
     public void testReadPdf_shouldRetrieveEmpty_whePdfFileIsEmptyAtAll_1() throws IOException {
-        var textContent = pdfAdapter.retrieveTextContent(ABSOLUTE_PATH_TO_BASE_DIR + EMPTY_PDF);
+        var pdfFileData = readFromFile(ABSOLUTE_PATH_TO_BASE_DIR + EMPTY_PDF);
+        var textContent = pdfAdapter.retrieveTextContent(pdfFileData);
         assertThat(textContent).isEmpty();
     }
 
@@ -56,14 +58,16 @@ public class PdfAdapterTest implements ResourceLoader {
      */
     @Test
     public void testReadPdf_shouldRetrieveEmptyString_whePdfFileIsEmptyAtAll_2() throws IOException {
-        var textContent = pdfAdapter.retrieveTextContent(ABSOLUTE_PATH_TO_BASE_DIR + EMPTY_ONE_PAGE_PDF);
+        var pdfFileData = readFromFile(ABSOLUTE_PATH_TO_BASE_DIR + EMPTY_ONE_PAGE_PDF);
+        var textContent = pdfAdapter.retrieveTextContent(pdfFileData);
         assertThat(textContent).isNotEmpty();
         assertThat(textContent.get()).isBlank();
     }
 
     @Test
     public void testReadPdf_shouldRetrieveEmptyString_whePdfFileIsEmptyAtAll_3() throws IOException {
-        var textContent = pdfAdapter.retrieveTextContent(ABSOLUTE_PATH_TO_BASE_DIR + NON_EMPTY_ONE_PAGE_PDF);
+        var pdfFileData = readFromFile(ABSOLUTE_PATH_TO_BASE_DIR + NON_EMPTY_ONE_PAGE_PDF);
+        var textContent = pdfAdapter.retrieveTextContent(pdfFileData);
         assertThat(textContent).isNotEmpty();
         assertThat(textContent.get()).contains("GLOSSARY");
         assertThat(textContent.get()).contains("word 1", "word 2");

@@ -6,7 +6,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.awt.geom.Rectangle2D;
-import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
 
@@ -24,9 +23,9 @@ public class PdfAdapter {
     public static final float REGION_END_W = 611;
     public static final float REGION_END_H = 601;
 
-    public Optional<String> retrieveTextContent(File file) throws IOException {
-        LOGGER.info("Content retrieval for file {}", file);
-        try (var doc = PDDocument.load(file)) {
+    public Optional<String> retrieveTextContent(byte[] pdfFileData) throws IOException {
+        LOGGER.info("Content retrieval with length {}", pdfFileData.length);
+        try (var doc = PDDocument.load(pdfFileData)) {
             if (doc.getNumberOfPages() == 0) {
                 LOGGER.debug("No pages found in document");
                 return Optional.empty();
@@ -39,11 +38,6 @@ public class PdfAdapter {
             }
             return Optional.of(sb.toString());
         }
-    }
-
-    public Optional<String> retrieveTextContent(String fileName) throws IOException {
-        LOGGER.info("Content retrieval for file {}", fileName);
-        return retrieveTextContent(new File(fileName));
     }
 
     private Rectangle2D createFixedTextRegion() {
