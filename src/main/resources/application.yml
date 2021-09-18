@@ -12,6 +12,8 @@ quarkus:
     category:
       "org.example":
         level: INFO
+  package:
+    type: uber-jar
 
 "%dev":
   quarkus:

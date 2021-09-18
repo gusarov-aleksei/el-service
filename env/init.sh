@@ -2,7 +2,6 @@
 echo "User home is $HOME"
 mkdir "$HOME"/esl
 export LOCAL_SOURCE_DIR="$HOME"/esl
-echo "$LOCAL_SOURCE_DIR"
 echo "Set local source directory env '$LOCAL_SOURCE_DIR' is performed"
 
 # Copy test data to LOCAL_SOURCE_DIR
