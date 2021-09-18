@@ -1,0 +1,22 @@
+==================            Git          ========================
+List settings
+git config --list
+
+Show user email
+git config user.email
+
+Set user email
+git config user.email account@example.com
+
+==================            Docker          ========================
+Simple pulling
+docker pull bellsoft/liberica-openjdk-alpine:11.0.12-7
+
+Build image with 'el-service:0.1' name:tag from Dockerfile placed in current directory
+docker build -t el-service:0.1 .
+
+Run container of image 'el-service:0.1'
+docker run -i --rm -p 8080:8080 el-service:0.1
+
+List ids of created containers
+docker ps -aq
