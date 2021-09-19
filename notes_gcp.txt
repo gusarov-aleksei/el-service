@@ -1,0 +1,59 @@
+Here is some notes about GCP environment and command line interface(CLI).
+
+Prerequisite:
+1) Create google account and use it to login into GCP
+2) Create active Billing Account
+https://cloud.google.com/billing/docs/how-to/manage-billing-account
+3) Created Project in GCP and link it with Billing Account
+https://cloud.google.com/resource-manager/docs/creating-managing-projects
+https://cloud.google.com/billing/docs/how-to/modify-project
+
+It is possible to control GCP environment through command line interface of Google SDK:
+Need to install Google SDK at client station (workstation of developer)
+https://cloud.google.com/sdk/docs/install
+and allow SDK using Google Account (auth credentials is also required for client application too).
+To run applications externally (outside GCP) with connection to GCP, service account is required.
+Need to create such account and use it by running application externally.
+Here is guide how to creat it:  https://cloud.google.com/docs/authentication/production
+Something like this:
+1) create key for project, for example 'algus-project-382-4c2c24b9861e.json'
+2) download it
+3) export to local env of operating system 'GOOGLE_APPLICATION_CREDENTIALS'
+
+CLI manual help can be found here
+https://cloud.google.com/sdk/docs/cheatsheet
+and https://cloud.google.com/sdk/gcloud/reference/
+
+Common rule of Cloud resource usage: create resources and delete resources after service removal.
+
+Examples of 'gcloud', 'gsutil' commands for resource managing:
+List all project: gcloud projects list
+List five created projects sorted by projectId: gcloud projects list --sort-by=projectId --limit 5
+To list files of bucket in Google Storage(GS): gsutil ls -r gs://BUCKET_NAME/**
+Remove all blobs located in bucket: gsutil rm -r gs://algus-project-382
+
+Info about Google Storage(GS) and its usage examples
+https://cloud.google.com/storage/docs
+https://cloud.google.com/storage/docs/samples
+https://cloud.google.com/storage/docs/listing-objects#storage-list-objects-java
+
+Java Google API client:
+https://developers.google.com/api-client-library/java
+
+If credentials are not specified while constructing the GCP client, then client library
+will look for credentials in environment variable GOOGLE_APPLICATION_CREDENTIALS
+https://cloud.google.com/docs/authentication/production#auth-cloud-explicit-java
+To pass credentials while constructing client need to create 'GoogleCredentials' from downloaded 'algus-project-382-4c2c24b9861e.json':
+GoogleCredentials credentials = GoogleCredentials.fromStream(new FileInputStream('algus-project-382-4c2c24b9861e.json'))
+.createScoped(Lists.newArrayList("https://www.googleapis.com/auth/cloud-platform"));
+Storage storage = StorageOptions.newBuilder().setCredentials(credentials).build().getService()
+
+
+Info about free resource (suitable for learning and development)
+https://cloud.google.com/free/docs/gcp-free-tier
+
+Extended API of GS client:
+'google-cloud-nio' library contains useful API for running GS locally in memory.
+
+
+All present links were found using Google.
