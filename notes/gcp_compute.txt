@@ -1,0 +1,6 @@
+Cloud compute service:
+https://cloud.google.com/compute/docs/gcloud-compute
+
+List GCP regions:
+gcloud compute regions list
+gcloud compute zones list

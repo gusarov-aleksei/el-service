@@ -1,13 +1,3 @@
-==================            Git          ========================
-List settings
-git config --list
-
-Show user email
-git config user.email
-
-Set user email
-git config user.email account@example.com
-
 ==================            Docker          ========================
 Simple pulling
 docker pull bellsoft/liberica-openjdk-alpine:11.0.12-7
@@ -20,3 +10,6 @@ docker run -i --rm -p 8080:8080 el-service:0.1
 
 List ids of created containers
 docker ps -aq
+
+To see logs online:
+docker attach container_id
