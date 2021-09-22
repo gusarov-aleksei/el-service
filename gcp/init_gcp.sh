@@ -14,4 +14,4 @@ gcloud compute instances create-with-container el-service-vm --machine-type e2-m
 gcloud compute instances add-tags el-service-vm --tags el-service-tag
 
 # open port and and connect it to el-service-vm
-gcloud compute firewall-rules create el-service-traffic --direction=INGRESS --priority=1000 --network=default --action=ALLOW --rules=tcp:8080 --source-ranges=0.0.0.0/0 --target-tags=el-servie-tag
+gcloud compute firewall-rules create el-service-traffic --direction=INGRESS --priority=1000 --network=default --action=ALLOW --rules=tcp:8080 --source-ranges=0.0.0.0/0 --target-tags=el-service-tag

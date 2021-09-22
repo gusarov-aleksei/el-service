@@ -13,3 +13,6 @@ docker ps -aq
 
 To see logs online:
 docker attach container_id
+
+Get container info:
+docker inspect container_id
