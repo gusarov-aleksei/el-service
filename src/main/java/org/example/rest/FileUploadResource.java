@@ -62,7 +62,7 @@ public class FileUploadResource implements ResponseGenerator, FileOps, FileDataE
         //decouple and make map of <file_name, byte[]>
         var fileToBodyMap = retrieveFiles(request.getFormDataMap().get(FILE));
         for (var nameToBody : fileToBodyMap.entrySet()) {
-            LOGGER.debug("File '{}' is going to be saved into {}", nameToBody.getKey(), sourceDir);
+            LOGGER.debug("File '{}' of size {} is going to be saved", nameToBody.getKey() ,nameToBody.getValue().length);
             storageService.writeBytesToFile(nameToBody.getKey(), nameToBody.getValue());
         }
         //return persisted file names
@@ -88,7 +88,7 @@ public class FileUploadResource implements ResponseGenerator, FileOps, FileDataE
         if (data.file == null || data.file.length <= 2) {
             return badFileRequested();
         }
-        LOGGER.debug("File '{}' is going to be saved into {}", data.fileName, sourceDir);
+        LOGGER.debug("File '{}' is going to be saved", data.fileName);
         storageService.writeBytesToFile(data.fileName, data.file);
         return Response.ok(data.fileName).build();
     }

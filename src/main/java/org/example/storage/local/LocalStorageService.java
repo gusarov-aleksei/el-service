@@ -2,6 +2,8 @@ package org.example.storage.local;
 
 import org.example.file.FileOps;
 import org.example.storage.StorageService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
@@ -9,6 +11,8 @@ import java.io.IOException;
  * Instance of Storage Service operated with local file system
  */
 public class LocalStorageService implements StorageService, FileOps {
+
+    private Logger LOGGER = LoggerFactory.getLogger(LocalStorageService.class);
     //it ends with slash '/'
     private final String sourceDir;
 
@@ -17,17 +21,23 @@ public class LocalStorageService implements StorageService, FileOps {
     }
 
     @Override
-    public String[] listFileNames(String dir, String filePattern) throws IOException {
-        return getFiles(sourceDir + dir, filePattern);
+    public String[] listFileNames(String relativeDir, String filePattern) throws IOException {
+        var absolutePath = sourceDir + relativeDir;
+        LOGGER.info("Request for files list '{}' in '{}'", filePattern, absolutePath);
+        return getFiles(absolutePath, filePattern);
     }
 
     @Override
     public byte[] readBytesFormFile(String fileName) throws IOException {
-        return readFromFile(sourceDir +fileName);
+        var absolutePath = sourceDir + fileName;
+        LOGGER.info("Request for file reading '{}'", absolutePath);
+        return readFromFile(absolutePath);
     }
 
     @Override
     public void writeBytesToFile(String fileName, byte[] data) throws IOException {
-        this.saveIntoFile(sourceDir + fileName, data);
+        var absolutePath = sourceDir + fileName;
+        LOGGER.info("Request for file writing '{}' with data length {}", absolutePath, data.length);
+        this.saveIntoFile(absolutePath, data);
     }
 }

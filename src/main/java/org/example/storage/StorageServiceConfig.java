@@ -28,7 +28,7 @@ import static org.eclipse.microprofile.config.ConfigProvider.getConfig;
 @Dependent
 public class StorageServiceConfig {
 
-    private Logger LOGGER = LoggerFactory.getLogger(QuarkusLifeCycle.class);
+    private Logger LOGGER = LoggerFactory.getLogger(StorageServiceConfig.class);
 
     @Inject
     SourceConfig config;
@@ -56,6 +56,13 @@ public class StorageServiceConfig {
     @Produces
     @DefaultBean
     public StorageService localStorageService() {
+        //TODO change bean configuration
+        if (StorageType.GS.equals(getConfig().getValue("storage.type", StorageType.class))) {
+            LOGGER.info("GoogleStorageService implementation is used");
+            var bucket = getConfig().getOptionalValue("storage.gs.bucket", String.class).orElse("el-bucket");
+            return new GoogleStorageService(createGsClient(), bucket);
+        }
+        LOGGER.info("LocalStorageService implementation is used");
         return new LocalStorageService(config.directory());
     }
 }

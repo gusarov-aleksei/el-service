@@ -38,7 +38,6 @@ public class EnglishContentService implements FileOps {
      */
     public String[] listDocumentNames()  {
         try {
-            LOGGER.info("Request for files '{}' listing in directory {}", config.extension(), config.directory());
             return storageService.listFileNames("", config.extension());
         } catch (IOException e) {
             LOGGER.error("Error while file listing!");
