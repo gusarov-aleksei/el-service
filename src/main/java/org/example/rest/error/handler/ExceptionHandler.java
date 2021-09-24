@@ -14,7 +14,7 @@ import static org.example.rest.error.Error.INTERNAL_ERROR;
 @Provider
 public class ExceptionHandler implements ExceptionMapper<Exception>, ResponseGenerator {
 
-    private Logger LOGGER = LoggerFactory.getLogger(ExceptionHandler.class);
+    private final Logger LOGGER = LoggerFactory.getLogger(ExceptionHandler.class);
     //TODO generalize approach
     @Override
     public Response toResponse(Exception e) {

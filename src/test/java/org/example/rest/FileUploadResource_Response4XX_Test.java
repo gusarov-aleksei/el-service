@@ -5,7 +5,6 @@ import io.quarkus.test.junit.TestProfile;
 import org.example.pdf.ResourceLoader;
 import org.junit.jupiter.api.Test;
 
-import java.io.FileNotFoundException;
 import java.net.URISyntaxException;
 
 import static io.restassured.RestAssured.given;

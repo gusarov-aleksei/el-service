@@ -11,7 +11,7 @@ import java.io.FileNotFoundException;
  */
 public class GoogleStorageService implements StorageService {
 
-    private Logger LOGGER = LoggerFactory.getLogger(GoogleStorageService.class);
+    private final Logger LOGGER = LoggerFactory.getLogger(GoogleStorageService.class);
 
     private final GsClient client;
     private final String defaultBucket;

@@ -19,7 +19,7 @@ import java.util.Optional;
 @Singleton
 public class EnglishContentService implements FileOps {
 
-    private Logger LOGGER = LoggerFactory.getLogger(EnglishContentService.class);
+    private final Logger LOGGER = LoggerFactory.getLogger(EnglishContentService.class);
 
     @Inject
     SourceConfig config;
@@ -27,7 +27,7 @@ public class EnglishContentService implements FileOps {
     @Inject
     StorageService storageService;
 
-    private PdfAdapter pdfAdapter = new PdfAdapter();
+    private final PdfAdapter pdfAdapter = new PdfAdapter();
     @Inject
     EnglishContentExtractor englishContentExtractor;
 
@@ -37,12 +37,7 @@ public class EnglishContentService implements FileOps {
      * @return array of file names
      */
     public String[] listDocumentNames()  {
-        try {
-            return storageService.listFileNames("", config.extension());
-        } catch (IOException e) {
-            LOGGER.error("Error while file listing!");
-            throw new RuntimeException(e);
-        }
+        return storageService.listFileNames("", config.extension());
     }
 
     /**

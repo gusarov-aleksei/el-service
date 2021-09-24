@@ -23,7 +23,7 @@ public class PdfAdapterTest implements ResourceLoader, FileOps {
     final static String ABSOLUTE_PATH_TO_BASE_DIR =
             PdfAdapterTest.class.getClassLoader().getResource("").getFile();
 
-    PdfAdapter pdfAdapter = new PdfAdapter();
+    final PdfAdapter pdfAdapter = new PdfAdapter();
 
     /**
      * Test validates text retrieval from pdf file.

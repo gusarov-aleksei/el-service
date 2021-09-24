@@ -32,10 +32,7 @@ import java.io.IOException;
 @Path("/")
 public class FileUploadResource implements ResponseGenerator, FileOps, FileDataExtractor {
 
-    private Logger LOGGER = LoggerFactory.getLogger(FileUploadResource.class);
-
-    @ConfigProperty(name = "storage.source.directory")
-    String sourceDir;
+    private final Logger LOGGER = LoggerFactory.getLogger(FileUploadResource.class);
 
     @Inject
     StorageService storageService;

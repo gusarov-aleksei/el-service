@@ -18,9 +18,8 @@ public interface FileOps {
      * @param absolutePath absolute path directory
      * @param filePattern file extension like '*.pdf'
      * @return array of file names
-     * @throws IOException internal error of working with file
      */
-    default String[] getFiles(String absolutePath, String filePattern) throws IOException {
+    default String[] getFiles(String absolutePath, String filePattern) {
         var filesList = new File(absolutePath).list();
         if (filesList == null) {
             return EMPTY_ARRAY;

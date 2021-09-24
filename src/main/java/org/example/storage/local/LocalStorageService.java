@@ -12,7 +12,7 @@ import java.io.IOException;
  */
 public class LocalStorageService implements StorageService, FileOps {
 
-    private Logger LOGGER = LoggerFactory.getLogger(LocalStorageService.class);
+    private final Logger LOGGER = LoggerFactory.getLogger(LocalStorageService.class);
     //it ends with slash '/'
     private final String sourceDir;
 
@@ -21,7 +21,7 @@ public class LocalStorageService implements StorageService, FileOps {
     }
 
     @Override
-    public String[] listFileNames(String relativeDir, String filePattern) throws IOException {
+    public String[] listFileNames(String relativeDir, String filePattern) {
         var absolutePath = sourceDir + relativeDir;
         LOGGER.info("Request for files list '{}' in '{}'", filePattern, absolutePath);
         return getFiles(absolutePath, filePattern);

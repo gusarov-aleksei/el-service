@@ -4,7 +4,6 @@ import com.google.cloud.storage.contrib.nio.testing.LocalStorageHelper;
 import io.quarkus.arc.DefaultBean;
 import io.quarkus.arc.properties.IfBuildProperty;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
-import org.example.application.QuarkusLifeCycle;
 import org.example.service.SourceConfig;
 import org.example.storage.gs.GoogleStorageService;
 import org.example.storage.gs.GsClient;
@@ -28,7 +27,7 @@ import static org.eclipse.microprofile.config.ConfigProvider.getConfig;
 @Dependent
 public class StorageServiceConfig {
 
-    private Logger LOGGER = LoggerFactory.getLogger(StorageServiceConfig.class);
+    private final Logger LOGGER = LoggerFactory.getLogger(StorageServiceConfig.class);
 
     @Inject
     SourceConfig config;
@@ -57,7 +56,7 @@ public class StorageServiceConfig {
     @DefaultBean
     public StorageService localStorageService() {
         //TODO change bean configuration
-        if (StorageType.GS.equals(getConfig().getValue("storage.type", StorageType.class))) {
+        if (StorageType.GS.equals(storageType)) {
             LOGGER.info("GoogleStorageService implementation is used");
             var bucket = getConfig().getOptionalValue("storage.gs.bucket", String.class).orElse("el-bucket");
             return new GoogleStorageService(createGsClient(), bucket);

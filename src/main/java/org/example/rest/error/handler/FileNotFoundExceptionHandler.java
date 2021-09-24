@@ -12,7 +12,7 @@ import java.io.FileNotFoundException;
 @Provider
 public class FileNotFoundExceptionHandler implements ExceptionMapper<FileNotFoundException>, ResponseGenerator {
 
-    private Logger LOGGER = LoggerFactory.getLogger(FileNotFoundException.class);
+    private final Logger LOGGER = LoggerFactory.getLogger(FileNotFoundException.class);
 
     @Override
     public Response toResponse(FileNotFoundException e) {

@@ -15,7 +15,7 @@ import static org.eclipse.microprofile.config.ConfigProvider.getConfig;
  */
 public class MockApplicationProfile implements QuarkusTestProfile {
 
-    private Logger LOGGER = LoggerFactory.getLogger(MockApplicationProfile.class);
+    private final Logger LOGGER = LoggerFactory.getLogger(MockApplicationProfile.class);
 
     @Override
     public Map<String, String> getConfigOverrides() {

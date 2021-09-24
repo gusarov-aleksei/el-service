@@ -16,7 +16,7 @@ import static java.util.stream.StreamSupport.stream;
  */
 public class GsClient {
 
-    private Storage storage;
+    private final Storage storage;
 
     public GsClient(Storage storage) {
         this.storage = storage;
@@ -43,8 +43,6 @@ public class GsClient {
     }
 
     public Optional<byte[]> downloadObject(String bucketName, String objectName) {
-        //Blob blob = storage.get(BlobId.of(bucketName, objectName));
-        //return blob.getContent();
         return Optional.ofNullable(storage.get(BlobId.of(bucketName, objectName)))
                 .map(Blob::getContent);
     }

@@ -11,9 +11,8 @@ public interface StorageService {
      * @param relativeDir relative directory
      * @param filePattern part of file name for filtering
      * @return array of names of file
-     * @throws IOException internal IO error
      */
-    String[] listFileNames(String relativeDir, String filePattern) throws IOException;
+    String[] listFileNames(String relativeDir, String filePattern);
 
     /**
      * Retrieves file content

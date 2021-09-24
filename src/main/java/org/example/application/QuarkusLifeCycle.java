@@ -15,7 +15,7 @@ import static org.eclipse.microprofile.config.ConfigProvider.getConfig;
 @ApplicationScoped
 public class QuarkusLifeCycle {
 
-    private Logger LOGGER = LoggerFactory.getLogger(QuarkusLifeCycle.class);
+    private final Logger LOGGER = LoggerFactory.getLogger(QuarkusLifeCycle.class);
 
     void onStart(@Observes StartupEvent ev) {
         Config config = getConfig();
