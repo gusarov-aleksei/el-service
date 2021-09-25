@@ -11,7 +11,7 @@ quarkus:
   log:
     category:
       "org.example":
-        level: INFO
+        level: DEBUG
   package:
     type: uber-jar
 
