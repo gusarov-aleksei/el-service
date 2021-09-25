@@ -12,7 +12,13 @@ List ids of created containers
 docker ps -aq
 
 To see logs online:
-docker attach container_id
+docker attach <container_id>
 
 Get container info:
-docker inspect container_id
+docker inspect <container_id>
+
+Follow logs
+docker logs -f <container_id>
+
+Restart container and pass env
+docker restart <container_id>

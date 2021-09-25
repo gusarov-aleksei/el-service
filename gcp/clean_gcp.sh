@@ -1,8 +1,8 @@
 #!/bin/bash
-#clean GCP  resources
+# clean GCP  resources
 
 # stop script in case of command error
-set -eou pipefail
+#set -eou pipefail
 
 echo "*** Delete resources of network"
 gcloud compute firewall-rules delete el-service-traffic

@@ -27,10 +27,22 @@ Push image to Artifact Registry
 docker push us-east1-docker.pkg.dev/algus-project-382/algus-docker-repo/el-service:tag1
 
 Pull image
-docker push us-east1-docker.pkg.dev/algus-project-382/algus-docker-repo/el-service:tag1
+docker pull us-east1-docker.pkg.dev/algus-project-382/algus-docker-repo/el-service:tag1
 
 Delete repository
 gcloud artifacts repositories delete algus-docker-repo --location=us-east1
+
+Get artifact registries from all locations
+gcloud artifacts repositories list --location=us-east1 --limit=5
+                                                     ARTIFACT_REGISTRY
+REPOSITORY         FORMAT  DESCRIPTION        LOCATION  LABELS  ENCRYPTION          CREATE_TIME          UPDATE_TIME
+algus-docker-repo  DOCKER  Docker repository  us-east1          Google-managed key  2021-09-20T00:49:47  2021-09-23T19:29:19
+
+List images from repository
+gcloud artifacts docker images list us-east1-docker.pkg.dev/algus-project-382/algus-docker-repo
+
+Delete docker image from repository
+gcloud artifacts docker images delete us-east1-docker.pkg.dev/algus-project-382/algus-docker-repo/el-service:tag1
 
 
 =============== Deploy container to VM instance ==================
@@ -47,7 +59,10 @@ gcloud config unset compute/zone
 Create VM with container:
 gcloud compute instances create-with-container el-service-vm --container-image us-east1-docker.pkg.dev/algus-project-382/algus-docker-repo/el-service:tag1
 Passing environment variables to enable GS usage:
-gcloud compute instances create-with-container el-service-vm --container-image us-east1-docker.pkg.dev/algus-project-382/algus-docker-repo/el-service:tag1 --container-env STORAGE_TYPE=GS --machine-type e2-micro
+gcloud compute instances create-with-container el-service-vm  --machine-type e2-micro --container-image us-east1-docker.pkg.dev/algus-project-382/algus-docker-repo/el-service:0.1 --container-env STORAGE_TYPE=GS
+
+Update already created and running instance with container (instance will stop and start again)
+gcloud compute instances update-container el-service-vm --container-image us-east1-docker.pkg.dev/algus-project-382/algus-docker-repo/el-service:0.1 --container-env STORAGE_TYPE=GS
 
 Use following flag to specify machine type (each machine type has its own characteristics and cost):
 --machine-type e2-micro
