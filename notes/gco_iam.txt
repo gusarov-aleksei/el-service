@@ -1,0 +1,51 @@
+==================== Identity and Access Management (IAM) =======================
+https://cloud.google.com/iam/docs/overview
+
+This component of GCP defines access to GCP resources. Everything is resource.
+Here is base statements of IAM:
+Resource - service of GCP: Projects, VM instances, GKE, Storage, etc.
+Principal - somebody or someone authenticated in system.
+Identity - Principal reflected in IAM (can be of different type: id or email of account, groups, allUsers). Identity has set of Roles granted to Principal.
+Role - set of permissions. Roles are granted to Principals. Permission format is 'service.resource.verb'.
+Policy - set of Roles attached to Resource and set of Roles bound to Principal (Member in terms of Policy)
+IAM checks Policy of Resource to determine if action is permitted for Principal with some assigned Role.
+Resource has hierarchy structure with inherited Policies: Organization -> Folder -> Project -> Resource
+
+List policies of 'algus-project-382' project:
+gcloud projects get-iam-policy algus-project-382 --format=json > ./algus-project-policy.json
+
+Best practice is to create new service account and grant additional Roles instead of using default service accounts(or adding auth scopes to instance used default service account):
+Create new service-account
+https://cloud.google.com/iam/docs/creating-managing-service-accounts#creating_a_service_account
+
+Steps are: 1) create account 2) assign policies 3) stop instance 4) assign account to instance 5) start instance
+
+gcloud iam service-accounts create algus-el-service --description "Account for file processing" --display-name="File processor instance"
+gcloud projects add-iam-policy-binding algus-project-382 --member=serviceAccount:algus-el-service@algus-project-382.iam.gserviceaccount.com --role=roles/storage.objectAdmin
+gcloud projects add-iam-policy-binding algus-project-382 --member=serviceAccount:algus-el-service@algus-project-382.iam.gserviceaccount.com --role=roles/artifactregistry.reader
+
+gcloud compute instances stop el-service-vm
+gcloud compute instances set-service-account el-service-vm --service-account algus-el-service@algus-project-382.iam.gserviceaccount.com --scopes=cloud-platform
+gcloud compute instances start el-service-vm
+
+Access to GCP API is managed by scope flag, for ex: --scopes=cloud-platform
+See: https://cloud.google.com/sdk/gcloud/reference/compute/instances/set-service-account
+
+Info about roles existing in GCP:
+https://cloud.google.com/iam/docs/understanding-roles
+
+List service-accounts:
+gcloud iam service-accounts list
+
+To display which service-account is used by instance:
+gcloud compute instances describe el-service-vm --format="yaml(name,status,serviceAccounts)"
+
+Set service account to instance for GCP authorization:
+https://cloud.google.com/sdk/gcloud/reference/compute/instances/set-service-account?hl=en
+https://cloud.google.com/compute/docs/access/create-enable-service-accounts-for-instances#using
+
+Managing IAM policy of bucket (bucket is resource too)
+https://cloud.google.com/storage/docs/access-control/using-iam-permissions
+
+Retry strategy in case of using IAM API directly:
+https://cloud.google.com/iam/docs/retry-strategy
