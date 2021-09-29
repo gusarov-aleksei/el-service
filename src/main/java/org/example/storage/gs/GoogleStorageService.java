@@ -1,10 +1,13 @@
 package org.example.storage.gs;
 
 import org.example.storage.StorageService;
+import org.jboss.resteasy.spi.NotImplementedYetException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.FileNotFoundException;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Instance of StorageService aimed for using Google Storage cloud service.
@@ -42,5 +45,11 @@ public class GoogleStorageService implements StorageService {
     public void writeBytesToFile(String fileName, byte[] data) {
         LOGGER.debug("'{}' bytes will be persisted into '{}' object of bucket '{}' ", data.length, fileName, defaultBucket);
         client.uploadObject(defaultBucket, fileName, data);
+    }
+
+    @Override
+    public List<Map.Entry<String, String>> deleteFiles(String[] fileNames) {
+        //TODO to be implemented
+        throw new NotImplementedYetException();
     }
 }

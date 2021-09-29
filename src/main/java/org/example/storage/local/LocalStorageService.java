@@ -6,6 +6,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Instance of Storage Service operated with local file system
@@ -39,5 +42,13 @@ public class LocalStorageService implements StorageService, FileOps {
         var absolutePath = sourceDir + fileName;
         LOGGER.info("Request for file writing '{}' with data length {}", absolutePath, data.length);
         this.saveIntoFile(absolutePath, data);
+    }
+
+    @Override
+    public List<Map.Entry<String, String>> deleteFiles(String[] fileNames) {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Request to delete files '{}'", Arrays.toString(fileNames));
+        }
+        return deleteFiles(fileNames, sourceDir);
     }
 }

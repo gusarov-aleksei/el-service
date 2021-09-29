@@ -1,6 +1,8 @@
 package org.example.storage;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Base API for working with Storage (place where blob data is located)
@@ -28,5 +30,12 @@ public interface StorageService {
      * @throws IOException internal IO error
      */
     void writeBytesToFile(String fileName, byte[] data) throws IOException;
+
+    /**
+     * Delete files from storage
+     * @param fileNames array of file names to delete
+     * @return result of delete operation. List of pairs fileName -> operation result
+     */
+    List<Map.Entry<String, String>> deleteFiles(String[] fileNames);
 
 }

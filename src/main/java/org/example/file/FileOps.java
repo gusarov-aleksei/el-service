@@ -4,7 +4,15 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+
+import static java.util.Collections.emptyList;
+import static java.util.Collections.unmodifiableList;
 
 /**
  * It provides with operations for working with files of local system
@@ -53,5 +61,28 @@ public interface FileOps {
         try (var inputStream = new FileInputStream(fileName)) {
             return inputStream.readAllBytes();
         }
+    }
+
+    /**
+     * Delete files by fileNames from absolutePathDirectory
+     * @param fileNames array of file names to delete
+     * @param absolutePathDirectory absolute path where files are located
+     * @return array of key-value with meaning fileName -> operation result
+     */
+    default List<Map.Entry<String, String>> deleteFiles(String[] fileNames, String absolutePathDirectory) {
+        if (fileNames.length == 0) {
+            return emptyList();
+        }
+        var result = new ArrayList<Map.Entry<String, String>>();
+        for (String fileName : fileNames) {
+            try {
+                Files.delete(Paths.get(absolutePathDirectory + fileName));
+                result.add(Map.entry(fileName, "OK"));
+            } catch (IOException e) {
+                result.add(Map.entry(fileName, e.getClass().getName() + ": " + e.getMessage()));
+                e.printStackTrace();
+            }
+        }
+        return unmodifiableList(result);
     }
 }
