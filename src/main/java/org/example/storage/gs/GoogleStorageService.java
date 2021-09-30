@@ -1,11 +1,11 @@
 package org.example.storage.gs;
 
 import org.example.storage.StorageService;
-import org.jboss.resteasy.spi.NotImplementedYetException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.FileNotFoundException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -49,7 +49,9 @@ public class GoogleStorageService implements StorageService {
 
     @Override
     public List<Map.Entry<String, String>> deleteFiles(String[] fileNames) {
-        //TODO to be implemented
-        throw new NotImplementedYetException();
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Request to delete files '{}'", Arrays.toString(fileNames));
+        }
+        return client.deleteObjects(defaultBucket, fileNames);
     }
 }

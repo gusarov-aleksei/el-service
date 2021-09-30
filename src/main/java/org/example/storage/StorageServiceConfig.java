@@ -45,7 +45,7 @@ public class StorageServiceConfig {
     private GsClient createGsClient() {
         if ("test".equals(getActiveProfile())) {
             LOGGER.info("FakeStorage will be used for 'test' profile");
-            return GsClient.of(LocalStorageHelper.getOptions().getService());
+            return GsClient.buildWithFakeStorage();
         }
         var projectId = getConfig().getValue("storage.gs.project", String.class);
         LOGGER.info("GCP project '{}'",projectId);

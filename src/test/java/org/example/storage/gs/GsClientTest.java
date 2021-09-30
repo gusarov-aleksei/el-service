@@ -1,15 +1,15 @@
 package org.example.storage.gs;
 
-import com.google.cloud.storage.contrib.nio.testing.LocalStorageHelper;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class GsClientTest {
     //create GsClient with local in-memory Storage
-    private GsClient client = new GsClient(LocalStorageHelper.getOptions().getService());
+    private GsClient client = GsClient.buildWithFakeStorage();
 
     @Test
     public void testUploadObject_whenObjectIsUploaded_shouldUploadItAndReturnTheNameOfFile() {
@@ -57,4 +57,19 @@ public class GsClientTest {
         assertThat(result).hasValue(content.getBytes());
         //System.out.println(new String(result.get(), StandardCharsets.UTF_8));
     }
+
+    @Test
+    public void testDeleteObjects_whenObjectDoesNotExist_shouldReturnNotOK() {
+        var result = client.deleteObjects("bucket-1", new String[]{"file1.txt", "file2.txt"});
+        assertThat(result).isNotEmpty().hasSize(2).hasSameElementsAs(List.of(Map.entry("file2.txt", "Not OK"), Map.entry("file1.txt", "Not OK")));
+    }
+
+    @Test
+    public void testDeleteObjects_whenObjectIsDeleted_shouldReturnOK() {
+        client.uploadObject("bucket-1", "file1.txt", "Test message 1".getBytes());
+        client.uploadObject("bucket-1", "file2.txt", "Test message 2".getBytes());
+        var result = client.deleteObjects("bucket-1", new String[]{"file1.txt", "file2.txt"});
+        assertThat(result).isNotEmpty().hasSize(2).hasSameElementsAs(List.of(Map.entry("file1.txt", "OK"), Map.entry("file2.txt", "OK")));
+    }
+
 }
