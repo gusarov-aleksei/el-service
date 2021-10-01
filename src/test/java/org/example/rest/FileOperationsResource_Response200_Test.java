@@ -2,15 +2,23 @@ package org.example.rest;
 
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.TestProfile;
+import io.restassured.response.Response;
+import org.assertj.core.util.Strings;
 import org.example.pdf.ResourceLoader;
 import org.junit.jupiter.api.Test;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.net.URISyntaxException;
+import java.util.List;
+import java.util.UUID;
 
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.core.Is.is;
 
@@ -23,7 +31,7 @@ import static org.hamcrest.core.Is.is;
  */
 @QuarkusTest
 @TestProfile(MockApplicationProfile.class)
-public class FileUploadResource_Response200_Test implements ResourceLoader {
+public class FileOperationsResource_Response200_Test implements ResourceLoader {
 
     @Test
     public void testUploadMulti_shouldUploadFileToSourceDir() throws URISyntaxException, FileNotFoundException {
@@ -79,5 +87,30 @@ public class FileUploadResource_Response200_Test implements ResourceLoader {
                 .body(notNullValue())
                 .body("size()", is(1))
                 .body("", hasItem("4 all pages uploaded 5.pdf"));
+    }
+
+    @Test
+    public void testDeleteFiles_whenNonExistingFileNameIsProvided_shouldReturnErrorsInCollection_with200() {
+        //initial condition
+        var randomName1 = UUID.randomUUID() + ".pdf";
+        var randomName2 = UUID.randomUUID() + ".pdf";
+        var fileNames = Strings.join(randomName1,randomName2).with(",");
+        Response response = given()
+                .when()
+                .queryParam("fileNames",fileNames)
+                .delete("/deleteFiles")
+                .andReturn();
+        // validate status code and basic body
+        // because of bulk deletion, some file could be deleted, some files could be absent at all - for case of absence 200 code is expected too
+        response.then()
+                .log().ifValidationFails()
+                .statusCode(200)
+                .body(notNullValue())
+                .body("", instanceOf(List.class))
+                .body("", hasSize(2))
+                .body("get(0).get(\"key\")", is(equalTo(randomName1)))
+                .body("get(0).get(\"value\")", is(containsString("NoSuchFileException")))
+                .body("get(1).get(\"key\")", is(equalTo(randomName2)))
+                .body("get(1).get(\"value\")", is(containsString("NoSuchFileException")));
     }
 }

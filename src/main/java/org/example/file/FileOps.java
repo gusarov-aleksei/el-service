@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -77,9 +78,9 @@ public interface FileOps {
         for (String fileName : fileNames) {
             try {
                 Files.delete(Paths.get(absolutePathDirectory + fileName));
-                result.add(Map.entry(fileName, "OK"));
+                result.add(new SimpleImmutableEntry<>(fileName, "OK"));
             } catch (IOException e) {
-                result.add(Map.entry(fileName, e.getClass().getName() + ": " + e.getMessage()));
+                result.add(new SimpleImmutableEntry<>(fileName, e.getClass().getName() + ": " + e.getMessage()));
                 e.printStackTrace();
             }
         }

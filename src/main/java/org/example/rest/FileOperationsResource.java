@@ -1,6 +1,5 @@
 package org.example.rest;
 
-import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.openapi.annotations.OpenAPIDefinition;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.info.Info;
@@ -13,10 +12,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
@@ -25,14 +27,14 @@ import java.io.IOException;
  * This class contains http endpoints used for file uploading
  */
 @OpenAPIDefinition(
-        info = @Info(title = "english-content-service",
-                description = "English pdf files uploader",
+        info = @Info(title = "File operations endpoint",
+                description = "Endpoint exposed for file uploading, deleting",
                 version = "Initial version")
 )
 @Path("/")
-public class FileUploadResource implements ResponseGenerator, FileOps, FileDataExtractor {
+public class FileOperationsResource implements ResponseGenerator, FileOps, FileDataExtractor {
 
-    private final Logger LOGGER = LoggerFactory.getLogger(FileUploadResource.class);
+    private final Logger LOGGER = LoggerFactory.getLogger(FileOperationsResource.class);
 
     @Inject
     StorageService storageService;
@@ -46,7 +48,7 @@ public class FileUploadResource implements ResponseGenerator, FileOps, FileDataE
     @POST
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
-    @Operation(summary = "Upload file the server (into source directory)",
+    @Operation(summary = "Upload file to the server (into source directory)",
             description = "This API is implemented with possibility of several files uploading at one request"
     )
     @Path("uploadMulti")
@@ -73,7 +75,7 @@ public class FileUploadResource implements ResponseGenerator, FileOps, FileDataE
      * @return name of persisted file
      * @throws IOException error of working with IO File API
      */
-    @Operation(summary = "Upload file the server (into source directory)")
+    @Operation(summary = "Upload file to the server (into source directory)")
     @POST
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.TEXT_PLAIN)
@@ -88,5 +90,16 @@ public class FileUploadResource implements ResponseGenerator, FileOps, FileDataE
         LOGGER.debug("File '{}' is going to be saved", data.fileName);
         storageService.writeBytesToFile(data.fileName, data.file);
         return Response.ok(data.fileName).build();
+    }
+
+    @Operation(summary = "Delete file at the server (located in source directory or at cloud storage)")
+    @DELETE
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("deleteFiles")
+    public Response deleteFile(@NotNull @QueryParam("fileNames") String fileNames) {
+        if (fileNames == null || fileNames.isEmpty()) {
+            return badFileNameRequested();
+        }
+        return Response.ok(storageService.deleteFiles(fileNames.split(","))).build();
     }
 }

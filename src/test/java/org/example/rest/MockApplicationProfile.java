@@ -10,6 +10,8 @@ import java.util.Map;
 import static io.quarkus.runtime.configuration.ProfileManager.getActiveProfile;
 import static org.eclipse.microprofile.config.ConfigProvider.getConfig;
 
+//TODO to reduce complexity, just always set LOCAL_SOURCE_DIR environment variable
+// at present moment this Profile is not required for source.directory substitution
 /**
  * Quarkus test profile used in unit-test with QuarkusTest annotation.
  */
@@ -27,7 +29,8 @@ public class MockApplicationProfile implements QuarkusTestProfile {
         var absolutePath = getClass().getClassLoader().getResource(relativeDir).getPath();
         LOGGER.info("storage.source.directory will be set to {}", absolutePath);
         //expected 'absolutePath' would be something like 'target/test-classes/pdf' - all compiled test classes are put into 'target/test-classes'
-        return Collections.singletonMap("%test.storage.source.directory", absolutePath);
+        //return Collections.singletonMap("%test.storage.source.directory", absolutePath);
+        return Collections.emptyMap();
     }
 
     @Override

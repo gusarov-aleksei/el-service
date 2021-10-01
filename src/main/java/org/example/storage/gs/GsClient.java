@@ -11,6 +11,7 @@ import com.google.cloud.storage.StorageException;
 import com.google.cloud.storage.StorageOptions;
 import com.google.cloud.storage.contrib.nio.testing.LocalStorageHelper;
 
+import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -91,11 +92,11 @@ public class GsClient {
                     new BatchResult.Callback<>() {
                         @Override
                         public void success(Boolean result) {
-                            results.add(Map.entry(name, "OK"));
+                            results.add(new SimpleImmutableEntry<>(name, "OK"));
                         }
                         @Override
                         public void error(StorageException exception) {
-                            results.add(Map.entry(name, exception.getMessage()));
+                            results.add(new SimpleImmutableEntry<>(name, exception.getMessage()));
                             exception.printStackTrace();
                         }
                     });

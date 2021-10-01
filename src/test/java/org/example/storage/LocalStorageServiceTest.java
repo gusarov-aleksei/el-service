@@ -29,6 +29,18 @@ public class LocalStorageServiceTest {
     }
 
     @Test
+    public void testDeleteFiles_whenFileDoesNotExist_shouldReturnNotOK() {
+        var name = UUID.randomUUID() + ".txt";
+        var result = storageService.deleteFiles(new String[]{name});
+        assertThat(result)
+                .isNotNull().hasSize(1).extracting("key").contains(name);
+        // check that value contains message with 'NoSuchFileException' and name
+        assertThat(result).extracting("value", String.class)
+                .filteredOn(value -> value.contains("NoSuchFileException"))
+                .filteredOn(value -> value.contains(name)).hasSize(1);
+    }
+
+    @Test
     public void testLocalStorageServiceOperations_Scenario1() throws IOException {
         //validate several operation. steps are below
         //write file
