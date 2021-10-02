@@ -7,11 +7,14 @@ import org.assertj.core.util.Strings;
 import org.example.pdf.ResourceLoader;
 import org.junit.jupiter.api.Test;
 
+import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.IntStream;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.containsString;
@@ -112,5 +115,46 @@ public class FileOperationsResource_Response200_Test implements ResourceLoader {
                 .body("get(0).get(\"value\")", is(containsString("NoSuchFileException")))
                 .body("get(1).get(\"key\")", is(equalTo(randomName2)))
                 .body("get(1).get(\"value\")", is(containsString("NoSuchFileException")));
+    }
+
+    @Test
+    public void testDeleteFiles_whenExistingFileNameIsProvided_shouldReturnOkInCollection_with200() {
+        //initial condition
+        var randomName1 = UUID.randomUUID() + ".pdf";
+        var randomName2 = UUID.randomUUID() + ".pdf";
+
+        generateAndUploadFilesToServer(randomName1, randomName2);
+
+        var fileNames = Strings.join(randomName1,randomName2).with(",");
+
+        Response response = given()
+                .when()
+                .queryParam("fileNames",fileNames)
+                .delete("/deleteFiles")
+                .andReturn();
+        // validate status code and basic body
+        // because of bulk deletion, some file could be deleted, some files could be absent at all - for case of absence 200 code is expected too
+        response.then()
+                .log().ifValidationFails()
+                .statusCode(200)
+                .body(notNullValue())
+                .body("", instanceOf(List.class))
+                .body("", hasSize(2))
+                .body("get(0).get(\"key\")", is(equalTo(randomName1)))
+                .body("get(0).get(\"value\")", is("OK"))
+                .body("get(1).get(\"key\")", is(equalTo(randomName2)))
+                .body("get(1).get(\"value\")", is("OK"));
+    }
+
+    private static void generateAndUploadFilesToServer(String...fileNames) {
+        var requestSpec = given();
+        //add file with generated body to request
+        IntStream.range(0, fileNames.length).forEach(
+                i -> requestSpec.multiPart("file", fileNames[i], new ByteArrayInputStream(("Body of file " + fileNames[i]).getBytes())));
+        //upload files to server with some uploading assurance
+        requestSpec.post("/uploadMulti").then()
+               .statusCode(200)
+               .body(notNullValue())
+               .body("",hasSize(fileNames.length));
     }
 }
