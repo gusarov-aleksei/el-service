@@ -34,7 +34,7 @@ import static org.hamcrest.core.Is.is;
  */
 @QuarkusTest
 @TestProfile(MockApplicationProfile.class)
-public class FileOperationsResource_Response200_Test implements ResourceLoader {
+public class FileManagerResource_Response200_Test implements ResourceLoader {
 
     @Test
     public void testUploadMulti_shouldUploadFileToSourceDir() throws URISyntaxException, FileNotFoundException {

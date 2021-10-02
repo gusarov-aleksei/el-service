@@ -14,7 +14,7 @@ import static org.hamcrest.core.Is.is;
 
 @QuarkusTest
 @TestProfile(MockApplicationProfile.class)
-public class FileOperationsResource_Response4XX_Test implements ResourceLoader {
+public class FileManagerResource_Response4XX_Test implements ResourceLoader {
     //415 - Unsupported Media Type
     @Test
     public void testUploadMulti_whenNoContentPassed_shouldReturn415() {

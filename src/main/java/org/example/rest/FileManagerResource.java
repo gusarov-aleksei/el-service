@@ -32,9 +32,9 @@ import java.io.IOException;
                 version = "Initial version")
 )
 @Path("/")
-public class FileOperationsResource implements ResponseGenerator, FileOps, FileDataExtractor {
+public class FileManagerResource implements ResponseGenerator, FileOps, FileDataExtractor {
 
-    private final Logger LOGGER = LoggerFactory.getLogger(FileOperationsResource.class);
+    private final Logger LOGGER = LoggerFactory.getLogger(FileManagerResource.class);
 
     @Inject
     StorageService storageService;
