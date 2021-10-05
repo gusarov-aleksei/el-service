@@ -1,0 +1,44 @@
+======================= Working with templates, instance groups ===============================
+
+Need to create template instance which carry almost the same parameters as instance itself.
+https://cloud.google.com/compute/docs/instance-templates/create-instance-templates#gcloud
+
+gcloud compute instance-templates create-with-container el-service-vm-template --machine-type e2-micro --container-image us-east1-docker.pkg.dev/algus-project-382/algus-docker-repo/el-service:0.1 --container-env STORAGE_TYPE=GS --service-account algus-el-service@algus-project-382.iam.gserviceaccount.com --scopes=cloud-platform
+gcloud compute instances create-with-container el-service-vm  --machine-type e2-micro --container-image us-east1-docker.pkg.dev/algus-project-382/algus-docker-repo/el-service:0.1 --container-env STORAGE_TYPE=GS
+gcloud compute instance-templates set-service-account el-service-vm-template --service-account algus-el-service@algus-project-382.iam.gserviceaccount.com --scopes=cloud-platform
+gcloud compute instances set-service-account el-service-vm --service-account algus-el-service@algus-project-382.iam.gserviceaccount.com --scopes=cloud-platform
+
+Also it is possible to create template from already created instance by using --source-instance and --source-instance-zone flags.
+
+https://cloud.google.com/compute/docs/instance-groups
+https://cloud.google.com/compute/docs/instance-groups/creating-groups-of-managed-instances
+
+gcloud compute instance-groups managed create el-service-vm-group --size 1 --template el-service-vm-template --base-instance-name el-service-vm-instance
+To check status of instance-group (if all instances are stable status.isStable):
+gcloud compute instance-groups managed describe el-service-vm-group
+
+To list instances of managed-group
+$ gcloud compute instance-groups managed list-instances el-service-vm-group
+NAME                         ZONE        STATUS   HEALTH_STATE  ACTION  INSTANCE_TEMPLATE       VERSION_NAME  LAST_ERROR
+el-service-vm-instance-6gvg  us-east1-b  RUNNING                NONE    el-service-vm-template
+el-service-vm-instance-cbzp  us-east1-b  RUNNING                NONE    el-service-vm-template
+el-service-vm-instance-zgp5  us-east1-b  RUNNING                NONE    el-service-vm-template
+
+gcloud compute instance-groups managed delete el-service-vm-group
+
+======================= Adding health-checks to instance group ===============================
+
+To configure health check and enable health checking for group
+https://cloud.google.com/load-balancing/docs/health-checks?hl=en
+
+gcloud compute health-checks create http el-service-health-check --project=algus-project-382 --port=8080 --request-path=/q/health/live --proxy-header=NONE --no-enable-logging --check-interval=5 --timeout=5 --unhealthy-threshold=2 --healthy-threshold=2
+
+https://cloud.google.com/compute/docs/instance-groups/autohealing-instances-in-migs#health_states
+https://cloud.google.com/compute/docs/instance-groups/autohealing-instances-in-migs?hl=en
+
+gcloud compute instance-groups managed update el-service-vm-group --health-check el-service-health-check --initial-delay 180
+
+Use preemptible instance in instance group
+https://cloud.google.com/compute/docs/instances/preemptible#preemptible-with-instance-groups
+
+
