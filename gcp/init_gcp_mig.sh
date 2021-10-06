@@ -19,10 +19,10 @@ echo "*** Create instance templates"
 gcloud compute instance-templates create-with-container el-service-vm-template --machine-type e2-micro --container-image us-east1-docker.pkg.dev/algus-project-382/algus-docker-repo/el-service:0.1 --container-env STORAGE_TYPE=GS --service-account algus-el-service@algus-project-382.iam.gserviceaccount.com --scopes=cloud-platform --tags el-service-tag
 
 #echo "*** Create health-checks"
-#gcloud compute health-checks create http el-service-health-check --project=algus-project-382 --port=8080 --request-path=/q/health/live --proxy-header=NONE --no-enable-logging --check-interval=5 --timeout=5 --unhealthy-threshold=2 --healthy-threshold=2
+gcloud compute health-checks create http el-service-health-check --project=algus-project-382 --port=8080 --request-path=/q/health/live --proxy-header=NONE --no-enable-logging --check-interval=5 --timeout=5 --unhealthy-threshold=2 --healthy-threshold=2
 
 echo "*** Create instance group"
 gcloud compute instance-groups managed create el-service-vm-group --size 1 --template el-service-vm-template --base-instance-name el-service-vm-instance
 
 #echo "*** Attach health-check to instance group"
-#gcloud compute instance-groups managed update el-service-vm-group --health-check el-service-health-check --initial-delay 180
+gcloud compute instance-groups managed update el-service-vm-group --health-check el-service-health-check --initial-delay 180
