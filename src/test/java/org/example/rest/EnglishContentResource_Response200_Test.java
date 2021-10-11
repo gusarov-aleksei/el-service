@@ -2,8 +2,11 @@ package org.example.rest;
 
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.TestProfile;
+import org.example.pdf.ResourceLoader;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+
+import java.net.URISyntaxException;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.endsWith;
@@ -21,7 +24,7 @@ import static org.hamcrest.Matchers.startsWith;
  */
 @QuarkusTest
 @TestProfile(MockApplicationProfile.class)
-public class EnglishContentResource_Response200_Test {
+public class EnglishContentResource_Response200_Test implements ResourceLoader {
     @Disabled
     @Test
     public void testExtractEndpoint_shouldReturnTextStructure_whenValidFileNameIsProvided() {
@@ -43,7 +46,10 @@ public class EnglishContentResource_Response200_Test {
                 .body("whatElse", hasKey(startsWith("don't look now")));
     }
     @Test
-    public void testExtractEndpoint_sample_file_shouldReturnTextStructure_whenValidFileNameIsProvided() {
+    public void testExtractEndpoint_sample_file_shouldReturnTextStructure_whenValidFileNameIsProvided() throws URISyntaxException {
+        given().multiPart("fileName", "4 all pages.pdf")
+                .multiPart("file", getFile("pdf/4 all pages.pdf"))
+                .post("/upload").andReturn();
         given()
                 .when()
                 .queryParam("fileName","4 all pages.pdf")
@@ -65,7 +71,10 @@ public class EnglishContentResource_Response200_Test {
     }
 
     @Test
-    public void testListEndpoint_shouldReturnListOfFiles_whenLocalDirectoryContainsFiles() {
+    public void testListEndpoint_shouldReturnListOfFiles_whenLocalDirectoryContainsFiles() throws URISyntaxException {
+        given().multiPart("fileName", "0 empty.pdf")
+                .multiPart("file", getFile("pdf/0 empty.pdf"))
+                .post("/upload").andReturn();
         given()
                 .when()
                 .get("/list")
