@@ -1,4 +1,6 @@
 steps:
+  - name: 'gcr.io/cloud-builders/mvn'
+    args: [ 'clean', 'install' ]
   - name: 'gcr.io/cloud-builders/docker'
     args: [ 'build', '-t', 'us-east1-docker.pkg.dev/algus-project-382/algus-docker-repo/el-service:0.1', '.' ]
 images:
