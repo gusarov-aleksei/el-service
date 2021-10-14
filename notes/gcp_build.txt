@@ -1,0 +1,17 @@
+====================== CI Build and Deploy======================================
+Info about build
+https://cloud.google.com/build/docs/quickstart-build
+
+Following step for usage GCP Build service:
+1. activate Build service at GCP console
+2. create cloudbuild.yaml config with build steps and put with Dockerfile into the same directory
+Info about how to create cloudbuild.yaml:
+https://cloud.google.com/build/docs/configuring-builds/create-basic-configuration
+https://cloud.google.com/artifact-registry/docs/configure-cloud-build
+
+To trigger cloud build manually (operation will send local project source to GCP)
+1. go to root directory of project with cloudbuild.yaml
+2. call command 'gcloud builds submit'
+
+Info about deploy
+https://cloud.google.com/deploy/docs/concepts/
