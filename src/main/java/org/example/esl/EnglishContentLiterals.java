@@ -13,9 +13,17 @@ public interface EnglishContentLiterals {
     String SPACE = " ";
     String START_NEW_LINE_TWICE = START_NEW_LINE + START_NEW_LINE;
     String START_NEW_LINE_TWICE_2 = START_NEW_LINE + " " + START_NEW_LINE;
+    //for unix OS new line separator has another byte code representation without \r
+    String START_NEW_LINE_UNIX = "\n";
+    String START_NEW_LINE_TWICE_UNIX = START_NEW_LINE_UNIX + START_NEW_LINE_UNIX;
+    String START_NEW_LINE_TWICE_2_UNIX = START_NEW_LINE_UNIX + " " + START_NEW_LINE_UNIX;
 
-    String[] START_NEW_LINE_TWICE_LITERALS = new String[]{START_NEW_LINE_TWICE, START_NEW_LINE_TWICE_2};
-    String[] DASH_LITERALS = new String[]{" – ", " - "};
+    String[] START_NEW_LINE_LITERALS = new String[]{START_NEW_LINE, START_NEW_LINE_UNIX};
+    String[] START_NEW_LINE_TWICE_LITERALS = new String[]{START_NEW_LINE_TWICE, START_NEW_LINE_TWICE_2, START_NEW_LINE_TWICE_UNIX, START_NEW_LINE_TWICE_2_UNIX};
+
+    String DASH_1 = " – ";
+    String DASH_2 = " - ";
+    String[] DASH_LITERALS = new String[]{DASH_1, DASH_2};
 
     String PATTERN_IN_TEXT = START_NEW_LINE + "%s";
 
@@ -39,7 +47,7 @@ public interface EnglishContentLiterals {
     };
 
     String[] END_OF_CULTURE_NOTES_LITERALS = new String[]{
-            START_NEW_LINE + "_", "Comprehension Questions Correct Answer"
+            START_NEW_LINE + "_", START_NEW_LINE_UNIX + "_", "Comprehension Questions Correct Answer"
     };
 
 }

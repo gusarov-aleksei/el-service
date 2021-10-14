@@ -9,7 +9,7 @@ public interface EnglishContentExtractor {
 
     Map<String, Optional<String>> extractRawContent(String text);
 
-    Map<String, String> extractGlossary(String rawTextWithGlossary);
+    Map<String, String> extractGlossary(String text);
 
     Map<String, String> extractWhatElse(String text);
 

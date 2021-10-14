@@ -15,7 +15,7 @@ import static org.example.esl.EnglishContentLiterals.END_OF_CULTURE_NOTES_LITERA
 import static org.example.esl.EnglishContentLiterals.GLOSSARY_KEY;
 import static org.example.esl.EnglishContentLiterals.SPACE;
 import static org.example.esl.EnglishContentLiterals.START_NEW_LINE;
-import static org.example.esl.EnglishContentLiterals.START_NEW_LINE_TWICE;
+import static org.example.esl.EnglishContentLiterals.START_NEW_LINE_LITERALS;
 import static org.example.esl.EnglishContentLiterals.START_NEW_LINE_TWICE_LITERALS;
 import static org.example.esl.EnglishContentLiterals.WHAT_ELSE_KEY;
 
@@ -87,46 +87,53 @@ public class EnglishContentExtractorImpl implements EnglishContentExtractor {
 
     /**
      * Extract Glossary section
-     * @param rawTextWithGlossary raw text with glossary section
+     * @param text raw text with glossary section
      * @return map of word to its explanation extracted from raw content
      */
-    public Map<String, String> extractGlossary(String rawTextWithGlossary) {
-        if (rawTextWithGlossary.isBlank()) {
+    public Map<String, String> extractGlossary(String text) {
+        if (text.isBlank()) {
             return emptyMap();
         }
         var wordToDescription = new LinkedHashMap<String, String>();
         int startIndex = 0;
-        while (startIndex < rawTextWithGlossary.length()) {
+        while (startIndex < text.length()) {
             //find word since start index
-            int endOfWord = getFirstOccurrence(rawTextWithGlossary, startIndex, DASH_LITERALS);
+            int endOfWord = getFirstOccurrence(text, startIndex, DASH_LITERALS);
             if (endOfWord == -1) {
                 break;
             }
-            String word = rawTextWithGlossary.substring(startIndex, endOfWord).strip();
+            String word = text.substring(startIndex, endOfWord).strip();
             startIndex = endOfWord + " – ".length();
-            if (startIndex >= rawTextWithGlossary.length()) {
+            if (startIndex >= text.length()) {
                 //end of the text is reached, nothing left to lose
                 break;
             }
             //find next word
             //int endOfNextWord = text.indexOf(" – ", startIndex);
-            int endOfNextWord = getFirstOccurrence(rawTextWithGlossary, startIndex, DASH_LITERALS);
+            int endOfNextWord = getFirstOccurrence(text, startIndex, DASH_LITERALS);
             if (endOfNextWord == -1) {
                 //this is last word in glossary section. end index is last index of the text
-                wordToDescription.put(word, clean(rawTextWithGlossary.substring(startIndex)));
+                wordToDescription.put(word, clean(text.substring(startIndex)));
                 break;
             }
-            //back to front from endOfNextWord
-            int startOfNextWord = rawTextWithGlossary.lastIndexOf("\r\n", endOfNextWord);
-            if (startOfNextWord == -1) {
-                startOfNextWord = endOfNextWord;
-            }
+            int startOfNextWord = getFirstOccurrenceBackward(text, endOfNextWord, START_NEW_LINE_LITERALS);
             //section between two words is definition of first word
-            var definition =  clean(rawTextWithGlossary.substring(startIndex, startOfNextWord));
+            var definition =  clean(text.substring(startIndex, startOfNextWord));
             wordToDescription.put(word, definition);
             startIndex = startOfNextWord;
         }
         return wordToDescription;
+    }
+
+    private int getFirstOccurrenceBackward(String text, int startFrom, String[] patterns) {
+        int foundPatternIndex = startFrom;
+        for (String pattern : patterns) {
+            foundPatternIndex = text.lastIndexOf(pattern, startFrom);
+            if (foundPatternIndex > - 1) {
+                break;
+            }
+        }
+        return foundPatternIndex;
     }
 
     private int getFirstOccurrence(String text, int startFrom, String[] patterns) {
@@ -146,33 +153,44 @@ public class EnglishContentExtractorImpl implements EnglishContentExtractor {
         }
         int currentIndex = 0;
         var wordToDefinition = new LinkedHashMap<String, String>();
-        //iterate over the text
+        //iterate over the text .currentIndex = getFirstLetter
         while (currentIndex < text.length()) {
             //find word start/end index
-            int startOfWord = getFirstOccurrence(text, currentIndex, START_NEW_LINE_TWICE_LITERALS);
+            int startOfWord = getFirstLetter(text, currentIndex);
             if (startOfWord == -1) {
                 break;
             }
-            startOfWord = startOfWord + START_NEW_LINE_TWICE.length();
+            //startOfWord = startOfWord + 4;
             if (startOfWord >= text.length()) {
                 //end of the text is reached, nothing left to do
                 break;
             }
-            int endOfWord = text.indexOf(START_NEW_LINE, startOfWord);
+            int endOfWord  = getFirstOccurrence(text, startOfWord, START_NEW_LINE_LITERALS);
             if (endOfWord == -1) {
                 break;
             }
-            var word = text.substring(currentIndex, endOfWord);
             //find word explanation end index
             int endOfExplanation = getFirstOccurrence(text, endOfWord, START_NEW_LINE_TWICE_LITERALS);
             if (endOfExplanation == -1) {
                 endOfExplanation = text.length();
             }
             //collect word and its explanation
-            wordToDefinition.put(word.strip(), clean(text.substring(endOfWord, endOfExplanation)));
+            if (startOfWord < endOfWord && endOfExplanation - endOfWord > 2) {
+                var word = text.substring(startOfWord, endOfWord);
+                wordToDefinition.put(word.strip(), clean(text.substring(endOfWord, endOfExplanation)));
+            }
             currentIndex = endOfExplanation;
         }
         return wordToDefinition;
+    }
+
+    private int getFirstLetter(String text, int fromIndex) {
+        for (int i = fromIndex ; i < text.length(); i++) {
+            if (Character.isLetter(text.charAt(i))) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     public String extractCultureNotes(String text) {
