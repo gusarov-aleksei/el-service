@@ -7,4 +7,4 @@ export LOCAL_SOURCE_DIR="$HOME"/esl
 echo "Set local source directory env '$LOCAL_SOURCE_DIR' is performed"
 
 echo "Run application"
-java -jar QJ-1.0-SNAPSHOT-runner.jar
+java "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5007" -jar QJ-1.0-SNAPSHOT-runner.jar

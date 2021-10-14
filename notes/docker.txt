@@ -6,7 +6,7 @@ Build image with 'el-service:0.1' name:tag from Dockerfile placed in current dir
 docker build -t el-service:0.1 .
 
 Run container of image 'el-service:0.1'
-docker run -i --rm -p 8080:8080 el-service:0.1
+docker run -i --rm -p 8080:8080 -p 5007:5007 el-service:0.1
 
 List ids of created containers
 docker ps -aq
