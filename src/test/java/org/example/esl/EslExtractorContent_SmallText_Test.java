@@ -5,6 +5,10 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.example.esl.EnglishContentLiterals.DASH_1;
 import static org.example.esl.EnglishContentLiterals.DASH_2;
+import static org.example.esl.EnglishContentLiterals.EMPTY;
+import static org.example.esl.EnglishContentLiterals.NEW_LINE_SYMBOLS_REGEXP;
+import static org.example.esl.EnglishContentLiterals.SERIAL_SPACES_REGEXP;
+import static org.example.esl.EnglishContentLiterals.SPACE;
 
 /**
  * Test with small input text. To validate separately parts of extract algorithm.
@@ -117,5 +121,23 @@ public class EslExtractorContent_SmallText_Test {
 
         assertThat(result).isNotNull();
         assertThat(result).isEmpty();
+    }
+
+    @Test
+    public void testReplaceAllNewLineSymbols_whenNewLineSpecialCharsExit_shouldReplaceItWithEmptiness() {
+        // regexp validation
+        var textToClean = "This text is\r\n \n\r\n to clear\r\n from\n special \r\ncharacters\n of\r new line.\r\n";
+        var expectedText = "This text is  to clear from special characters of new line.";
+
+        assertThat(textToClean.replaceAll(NEW_LINE_SYMBOLS_REGEXP, EMPTY)).isEqualTo(expectedText);
+    }
+
+    @Test
+    public void testReplaceAllSerialSpaces_whenSerialSpacesExit_shouldReplaceThemWithOneSpace() {
+        // regexp validation
+        var textToClean = "This text is    to squash spaces   into one.";
+        var expectedText = "This text is to squash spaces into one.";
+
+        assertThat(textToClean.replaceAll(SERIAL_SPACES_REGEXP, SPACE)).isEqualTo(expectedText);
     }
 }

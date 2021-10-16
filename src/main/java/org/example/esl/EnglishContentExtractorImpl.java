@@ -13,8 +13,9 @@ import static org.example.esl.EnglishContentLiterals.CULTURE_NOTE_KEY;
 import static org.example.esl.EnglishContentLiterals.DASH_LITERALS;
 import static org.example.esl.EnglishContentLiterals.END_OF_CULTURE_NOTES_LITERALS;
 import static org.example.esl.EnglishContentLiterals.GLOSSARY_KEY;
+import static org.example.esl.EnglishContentLiterals.NEW_LINE_SYMBOLS_REGEXP;
 import static org.example.esl.EnglishContentLiterals.SPACE;
-import static org.example.esl.EnglishContentLiterals.START_NEW_LINE;
+import static org.example.esl.EnglishContentLiterals.SERIAL_SPACES_REGEXP;
 import static org.example.esl.EnglishContentLiterals.START_NEW_LINE_LITERALS;
 import static org.example.esl.EnglishContentLiterals.START_NEW_LINE_TWICE_LITERALS;
 import static org.example.esl.EnglishContentLiterals.WHAT_ELSE_KEY;
@@ -202,6 +203,7 @@ public class EnglishContentExtractorImpl implements EnglishContentExtractor {
     }
 
     private String clean(String str) {
-        return str.strip().replaceAll(START_NEW_LINE, SPACE);
+        //replace all new line symbols to one space
+        return str.strip().replaceAll(NEW_LINE_SYMBOLS_REGEXP, SPACE).replaceAll(SERIAL_SPACES_REGEXP, SPACE);
     }
 }

@@ -11,12 +11,13 @@ public interface EnglishContentLiterals {
     String COMPLETE_TRANSCRIPT_KEY = "COMPLETE TRANSCRIPT";
     String START_NEW_LINE = "\r\n";
     String SPACE = " ";
+    String EMPTY = "";
     String START_NEW_LINE_TWICE = START_NEW_LINE + START_NEW_LINE;
-    String START_NEW_LINE_TWICE_2 = START_NEW_LINE + " " + START_NEW_LINE;
+    String START_NEW_LINE_TWICE_2 = START_NEW_LINE + SPACE + START_NEW_LINE;
     //for unix OS new line separator has another byte code representation without \r
     String START_NEW_LINE_UNIX = "\n";
     String START_NEW_LINE_TWICE_UNIX = START_NEW_LINE_UNIX + START_NEW_LINE_UNIX;
-    String START_NEW_LINE_TWICE_2_UNIX = START_NEW_LINE_UNIX + " " + START_NEW_LINE_UNIX;
+    String START_NEW_LINE_TWICE_2_UNIX = START_NEW_LINE_UNIX + SPACE + START_NEW_LINE_UNIX;
 
     String[] START_NEW_LINE_LITERALS = new String[]{START_NEW_LINE, START_NEW_LINE_UNIX};
     String[] START_NEW_LINE_TWICE_LITERALS = new String[]{START_NEW_LINE_TWICE, START_NEW_LINE_TWICE_2, START_NEW_LINE_TWICE_UNIX, START_NEW_LINE_TWICE_2_UNIX};
@@ -50,4 +51,6 @@ public interface EnglishContentLiterals {
             START_NEW_LINE + "_", START_NEW_LINE_UNIX + "_", "Comprehension Questions Correct Answer"
     };
 
+    String NEW_LINE_SYMBOLS_REGEXP = "\\r|\\n";
+    String SERIAL_SPACES_REGEXP = "\\s+";
 }
