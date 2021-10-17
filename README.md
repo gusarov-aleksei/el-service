@@ -22,5 +22,5 @@ The service is implemented in Java with [Apache PDFBox](https://pdfbox.apache.or
 Here is short description:
 - operations on files with [StorageService](./src/main/java/org/example/storage/StorageService.java)
 - text extraction from files with [EnglishContentService](./src/main/java/org/example/service/EnglishContentService.java)
-- access HTTP through [EnglishContentResource](./src/main/java/org/example/rest/EnglishContentResource.java), [FileManager](./src/main/java/org/example/rest/FileManagerResource.java)
+- HTTP-access through [EnglishContentResource](./src/main/java/org/example/rest/EnglishContentResource.java), [FileManagerResource](./src/main/java/org/example/rest/FileManagerResource.java)
 - ability to deploy into [GCP](https://cloud.google.com/) using Compute Engine, Cloud Storage, Cloud Build, Artifact Registry
