@@ -1,7 +1,12 @@
 import requests
 
+from gcp_ops import get_external_ip, get_gcp_compute_resource
+
 # enter ip address here
-host_url = "http://localhost:8181"
+compute_resource = get_gcp_compute_resource()
+instance_ip = get_external_ip(compute_resource)
+host_url = f"http://{instance_ip}:8080"
+print(f"el-service url is {host_url}")
 
 
 def create_files_data_request(file_names):
