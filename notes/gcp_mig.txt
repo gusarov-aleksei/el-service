@@ -26,6 +26,9 @@ el-service-vm-instance-zgp5  us-east1-b  RUNNING                NONE    el-servi
 
 gcloud compute instance-groups managed delete el-service-vm-group
 
+Describe instances (put actual instance name instead of el-service-vm-instance-krwp):
+gcloud compute instance-groups managed describe-instance el-service-vm-group --instance=el-service-vm-instance-krwp
+
 ======================= Adding health-checks to instance group ===============================
 
 To configure health check and enable health checking for group

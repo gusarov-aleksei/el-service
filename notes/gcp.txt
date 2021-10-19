@@ -56,4 +56,8 @@ Extended API of GS client:
 'google-cloud-nio' library contains useful API for running GS locally in memory.
 
 
+Besides 'gcloud' CLI, it is possible to manage GCP with Python:
+pip install --upgrade google-api-python-client
+https://cloud.google.com/compute/docs/tutorials/python-guide
+
 All present links were found using Google.

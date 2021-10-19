@@ -11,3 +11,16 @@ Deleted [https://www.googleapis.com/compute/v1/projects/algus-project-382/zones/
 
 Connect by ssh to VM:
 gcloud compute ssh el-service-vm
+
+Get Instance network interface (put actual instance name instead of el-service-vm-instance-krwp):
+gcloud compute instances describe el-service-vm-instance-krwp |grep natIP
+gcloud compute instances describe el-service-vm-instance-krwp --format="yaml(networkInterfaces)"
+
+List all network info for all instances:
+gcloud compute instances list --format="yaml(networkInterfaces)"
+
+Get help about filters:
+gcloud topic filters
+
+List instances filtered by name and get external IP address from first one:
+gcloud compute instances list --filter="name:el-service-vm-instance-*" --format "get(networkInterfaces[0].accessConfigs[0].natIP)"
