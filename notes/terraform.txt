@@ -1,0 +1,21 @@
+Doc about GCP provider
+https://registry.terraform.io/providers/hashicorp/google/latest/docs
+
+Main terraform commands.
+Download providers defined in config file
+terraform init
+
+Format config file
+terraform fmt
+
+Validate terraform configuration
+terraform validate
+
+Apply configuration:
+terraform apply
+
+Show current state of applied configuration
+terraform show
+
+Destroy configuration
+terraform destroy
