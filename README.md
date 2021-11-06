@@ -24,3 +24,17 @@ Here is short description:
 - text extraction from files with [EnglishContentService](./src/main/java/org/example/service/EnglishContentService.java)
 - HTTP-access through [EnglishContentResource](./src/main/java/org/example/rest/EnglishContentResource.java), [FileManagerResource](./src/main/java/org/example/rest/FileManagerResource.java)
 - ability to deploy into [GCP](https://cloud.google.com/) using Compute Engine, Cloud Storage, Cloud Build, Artifact Registry
+
+### How to build and deploy
+
+#### Tools
+Working with GCP is possible using different approaches, for example:
+- [Scripts](./gcp) of command line interface [gcloud](https://cloud.google.com/sdk/gcloud)
+- [Terraform](https://www.terraform.io/) infrastructure tool (see directory with [config](./gcp-terraform))
+
+#### Building
+Here is basic flow of [Docker](https://www.docker.com/) image preparation:
+1) Some changes are done in [codebase](./src)
+2) Cloud build is performed according to config [cloudbuild.yaml](./cloudbuild.yaml)
+with command 'gcloud builds submit' in the same with config directory.
+3) As result of step 2) image of built codebase is published in Artifact Registry (here are some [notes](./notes/gcp_docker.txt) of how to work with GCP Docker Registry) 
