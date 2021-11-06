@@ -11,6 +11,9 @@ terraform fmt
 Validate terraform configuration
 terraform validate
 
+Create execution plan comparing current configuration with prior state showing difference
+terraform plan
+
 Apply configuration:
 terraform apply
 
@@ -19,3 +22,11 @@ terraform show
 
 Destroy configuration
 terraform destroy
+
+Examples of template with docker container configuration (with container-vm module):
+https://github.com/terraform-google-modules/terraform-google-container-vm
+https://github.com/terraform-google-modules/terraform-google-container-vm/tree/master/examples
+https://registry.terraform.io/modules/terraform-google-modules/container-vm/google/latest
+https://www.willianantunes.com/blog/2021/05/the-easiest-way-to-run-a-container-on-gce-with-terraform/
+Example of managed instance group from Terraform
+https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_instance_group_manager
