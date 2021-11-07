@@ -22,14 +22,6 @@ resource "google_compute_firewall" "el_rule" {
   direction     = "INGRESS"
 }
 
-data "google_container_registry_image" "el_service_image" {
-  name = "us-east1-docker.pkg.dev/algus-project-382/algus-docker-repo/el-service:0.1"
-}
-
-output "gcr_location" {
-  value = data.google_container_registry_image.el_service_image.image_url
-}
-
 # this module allows to create instance with container optimized OS
 # (like gcloud compute instance-templates create-with-container)
 module "gce-container" {
