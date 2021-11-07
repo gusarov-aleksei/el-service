@@ -12,13 +12,17 @@ data "google_compute_instance_group" "el_service_vm_group" {
   zone = var.zone
 }
 
+locals {
+  el_service_instances = (data.google_compute_instance_group.el_service_vm_group.instances == null) ? [] : data.google_compute_instance_group.el_service_vm_group.instances
+}
+
 output "instances" {
   description = "A link of the deployed instance"
-  value       = data.google_compute_instance_group.el_service_vm_group.instances
+  value = local.el_service_instances
 }
 
 data "google_compute_instance" "el_service_vm_instances" {
-  for_each = data.google_compute_instance_group.el_service_vm_group.instances
+  for_each = local.el_service_instances
   self_link = each.key
   zone = var.zone
 }
