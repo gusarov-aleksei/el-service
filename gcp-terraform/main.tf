@@ -1,12 +1,4 @@
-terraform {
-  required_providers {
-    google = {
-      source  = "hashicorp/google"
-      version = "4.0.0"
-    }
-  }
-}
-
+# declare google provider usage for communications with GCP
 provider "google" {
   credentials = file(var.credentials)
 
