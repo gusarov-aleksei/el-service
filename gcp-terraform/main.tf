@@ -8,11 +8,11 @@ terraform {
 }
 
 provider "google" {
-  credentials = file("../env/gcp/algus-project-382-4c2c24b9861e.json")
+  credentials = file(var.credentials)
 
-  project = "algus-project-382"
-  region  = "us-east1"
-  zone    = "us-east1-b"
+  project = var.project_id
+  region  = var.region
+  zone    = var.zone
 }
 
 # firewall rules for el-service instances network traffic
