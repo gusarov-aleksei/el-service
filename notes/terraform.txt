@@ -26,6 +26,9 @@ terraform destroy
 Print output of TF configuration (see examples in outptus.tf)
 terraform output
 
+Refresh state from all managed remote objects
+terraform refresh
+
 Examples of template with docker container configuration (with container-vm module):
 https://github.com/terraform-google-modules/terraform-google-container-vm
 https://github.com/terraform-google-modules/terraform-google-container-vm/tree/master/examples

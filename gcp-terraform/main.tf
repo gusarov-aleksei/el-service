@@ -30,8 +30,6 @@ module "gce-container" {
   version = "~> 2.0"
 
   container = {
-    # image="us-east1-docker.pkg.dev/algus-project-382/algus-docker-repo/el-service@sha256:8234d3c652795c75ee47ea5573d5c93381dcb4a8af3e53ea449ec41e178717ff"
-    # image = "gcr.io/us-east1-docker.pkg.dev/algus-project-382/algus-docker-repo/el-service:0.1"
     image = "us-east1-docker.pkg.dev/algus-project-382/algus-docker-repo/el-service:0.1"
     env = [
       {
