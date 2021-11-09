@@ -13,5 +13,7 @@ tf-destroy:
 	cd gcp-terraform; terraform destroy;
 tf-out:
 	cd gcp-terraform; terraform output;
+tf-refresh:
+	cd gcp-terraform; terraform refresh;
 tests:
 	cd autotest && python tests.py
