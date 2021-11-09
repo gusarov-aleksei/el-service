@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 import java.util.Map;
 
+import static com.google.cloud.storage.Storage.BlobField.TIME_CREATED;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class GsClientTest {
@@ -54,7 +55,11 @@ public class GsClientTest {
         var result = client.downloadObject("bucket-1", "file1.txt");
         //validate result
         assertThat(result).isNotEmpty();
-        assertThat(result).hasValue(content.getBytes());
+        assertThat(result.get().getContent()).isNotNull().isEqualTo(content.getBytes());
+        assertThat(result.get().getName()).isNotNull().isEqualTo("file1.txt");
+        assertThat(result.get().getSize()).isNotNull().isEqualTo(content.getBytes().length);
+        assertThat(result.get().getMetadata()).isNotNull().hasSize(1)
+                .containsKey(TIME_CREATED.getSelector());
         //System.out.println(new String(result.get(), StandardCharsets.UTF_8));
     }
 

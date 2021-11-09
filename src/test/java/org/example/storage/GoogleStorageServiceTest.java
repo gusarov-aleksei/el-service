@@ -47,8 +47,12 @@ public class GoogleStorageServiceTest {
         var list = storageService.listFileNames("", ".txt");
         assertThat(list).contains(randomName);
 
-        var actualBody = storageService.readBytesFormFile(randomName);
-        assertThat(actualBody).isEqualTo(body);
+        var actualBody = storageService.readDataFormFile(randomName);
+        assertThat(actualBody).isNotNull().hasFieldOrPropertyWithValue("content", body);
+        assertThat(actualBody.metadata).isNotNull().hasSize(3)
+                .containsKey(FileData.TIME_CREATED)
+                .containsEntry(FileData.FILE_NAME, randomName)
+                .containsEntry(FileData.FILE_SIZE, String.valueOf(body.length));
 
         var deleteResult = storageService.deleteFiles(new String[]{randomName});
         assertThat(deleteResult)

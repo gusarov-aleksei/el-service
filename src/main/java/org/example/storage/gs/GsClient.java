@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import static com.google.cloud.storage.Storage.BlobField.TIME_CREATED;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.unmodifiableList;
 import static java.util.stream.StreamSupport.stream;
@@ -45,8 +46,9 @@ public class GsClient {
     }
 
     public String uploadObject(String bucketName, String name, byte[] data) {
-        BlobId blobId = BlobId.of(bucketName, name);
-        BlobInfo blobInfo = BlobInfo.newBuilder(blobId).build();
+        var blobId = BlobId.of(bucketName, name);
+        var blobMetadata = Map.of(TIME_CREATED.getSelector(), String.valueOf(System.currentTimeMillis()));
+        var blobInfo = BlobInfo.newBuilder(blobId).setMetadata(blobMetadata).build();
         return storage.create(blobInfo, data).getName();
     }
 
@@ -56,9 +58,8 @@ public class GsClient {
                 .map(Blob::getName).toArray(String[]::new);
     }
 
-    public Optional<byte[]> downloadObject(String bucketName, String objectName) {
-        return Optional.ofNullable(storage.get(BlobId.of(bucketName, objectName)))
-                .map(Blob::getContent);
+    public Optional<Blob> downloadObject(String bucketName, String objectName) {
+        return Optional.ofNullable(storage.get(BlobId.of(bucketName, objectName)));
     }
 
     private List<Map.Entry<String, String>> deleteObjectsInSingleMode(String bucketName, String[] objectNames) {

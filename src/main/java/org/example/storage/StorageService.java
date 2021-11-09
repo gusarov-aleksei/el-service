@@ -21,7 +21,7 @@ public interface StorageService {
      * @param fileName name of the file (relative path + file name)
      * @return array of bytes
      */
-    byte[] readBytesFormFile(String fileName) throws IOException;
+    FileData readDataFormFile(String fileName) throws IOException;
 
     /**
      * Save array of bytes into file with fileName

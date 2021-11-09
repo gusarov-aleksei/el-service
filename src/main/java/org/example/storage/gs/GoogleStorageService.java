@@ -1,11 +1,14 @@
 package org.example.storage.gs;
 
+import com.google.cloud.storage.Blob;
+import org.example.storage.FileData;
 import org.example.storage.StorageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.FileNotFoundException;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -34,11 +37,20 @@ public class GoogleStorageService implements StorageService {
     }
 
     @Override
-    public byte[] readBytesFormFile(String fileName) throws FileNotFoundException {
+    public FileData readDataFormFile(String fileName) throws FileNotFoundException {
         LOGGER.debug("Read '{}' object from bucket '{}'", fileName, defaultBucket);
-        return client.downloadObject(defaultBucket, fileName)
+        return client.downloadObject(defaultBucket, fileName).map(this::createFileData)
                 .orElseThrow(
                         () -> new FileNotFoundException(String.format(NOT_FOUND_PATTERN, fileName, defaultBucket)));
+    }
+
+    private FileData createFileData(Blob blob) {
+        // get metadata retrieved from storage
+        var metadata = new HashMap<>(blob.getMetadata());
+        // add some additional values to it
+        metadata.put(FileData.FILE_NAME, blob.getName());
+        metadata.put(FileData.FILE_SIZE, blob.getSize().toString());
+        return FileData.of(Map.copyOf(metadata), blob.getContent());
     }
 
     @Override
