@@ -30,7 +30,7 @@ module "gce-container" {
   version = "~> 2.0"
 
   container = {
-    image = "us-east1-docker.pkg.dev/algus-project-382/algus-docker-repo/el-service:0.1"
+    image = var.el_service_docker_image
     env = [
       {
         name  = "STORAGE_TYPE"

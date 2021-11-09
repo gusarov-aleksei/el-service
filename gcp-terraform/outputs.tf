@@ -1,5 +1,5 @@
 data "google_container_registry_image" "el_service_image" {
-  name = "us-east1-docker.pkg.dev/algus-project-382/algus-docker-repo/el-service:0.1"
+  name = var.el_service_docker_image
 }
 
 output "gcr_el_service_image" {
