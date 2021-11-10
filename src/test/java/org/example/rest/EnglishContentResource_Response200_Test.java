@@ -11,6 +11,7 @@ import java.net.URISyntaxException;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.endsWith;
 import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.hasEntry;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasKey;
 import static org.hamcrest.Matchers.hasValue;
@@ -50,7 +51,7 @@ public class EnglishContentResource_Response200_Test implements ResourceLoader {
         given().multiPart("fileName", "4 all pages.pdf")
                 .multiPart("file", getFile("pdf/4 all pages.pdf"))
                 .post("/upload").andReturn();
-        given()
+        var response = given()
                 .when()
                 .queryParam("fileName","4 all pages.pdf")
                 .get("/extract")
@@ -67,7 +68,10 @@ public class EnglishContentResource_Response200_Test implements ResourceLoader {
                 .body("glossary", hasValue(startsWith("Some say cigarettes are very enjoyable. They aren't.")))
                 .body("glossary", hasValue(endsWith("Enjoyment has nothing to do with it.")))
                 .body("whatElse", hasKey("Habits context"))
-                .body("whatElse", hasKey(startsWith("On reason of smoking")));
+                .body("whatElse", hasKey(startsWith("On reason of smoking")))
+                .body("metadata", hasEntry("fileName", "4 all pages.pdf"))
+                .body("metadata", hasKey("timeCreated"))
+                .body("metadata", hasEntry("fileSize", "215630"));
     }
 
     @Test

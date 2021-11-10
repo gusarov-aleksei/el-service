@@ -47,7 +47,10 @@ public class EnglishContentService implements FileOps {
      */
     public Optional<EnglishContent> extractContent(String fileName) throws IOException {
         LOGGER.info("Content retrieval for file {}", fileName);
-        return pdfAdapter.retrieveTextContent(storageService.readDataFormFile(fileName).content)
+        var fileData = storageService.readDataFormFile(fileName);
+        var opContent = pdfAdapter.retrieveTextContent(fileData.content)
                 .flatMap(englishContentExtractor::extractEscContent);
+        opContent.ifPresent(content -> content.setMetadata(fileData.metadata));
+        return opContent;
     }
 }

@@ -3,7 +3,7 @@ package org.example.esl;
 import java.util.Map;
 
 public class EnglishContent {
-    //TODO add topic and file name of source
+    private Map<String, String> metadata;
     private Map<String, String> glossary;
     private Map<String, String> whatElse;
     private String cultureNotes;
@@ -30,5 +30,13 @@ public class EnglishContent {
 
     public void setCultureNotes(String cultureNotes) {
         this.cultureNotes = cultureNotes;
+    }
+
+    public Map<String, String> getMetadata() {
+        return metadata;
+    }
+
+    public void setMetadata(Map<String, String> metadata) {
+        this.metadata = metadata;
     }
 }
