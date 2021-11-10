@@ -61,6 +61,12 @@ class ElServiceTest(unittest.TestCase):
         self.assertTrue(response_body['glossary']['EASYWAY'].startswith('Easy way to stop smoking'))
         self.assertTrue(response_body['glossary']['About enjoyment'].startswith('Some say cigarettes are'))
         self.assertTrue(response_body['glossary']['About enjoyment'].endswith('Enjoyment has nothing to do with it.'))
+        # validate metadata dictionary
+        self.assertTrue(response_body['metadata'] is not None)
+        self.assertTrue(response_body['metadata']['fileName'] == 'file one.pdf')
+        self.assertTrue(response_body['metadata']['fileSize'] == '215630')
+        self.assertTrue(response_body['metadata']['fileName'] == 'file one.pdf')
+        self.assertTrue('timeCreated' in response_body['metadata'])
         # print(json.dumps(response_body, indent=2))
         # clean up
         el_service_requests.delete_files()
