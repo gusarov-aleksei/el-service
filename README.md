@@ -38,3 +38,8 @@ Here is basic flow of [Docker](https://www.docker.com/) image preparation:
 2) Cloud build is performed according to config [cloudbuild.yaml](./cloudbuild.yaml)
 with command 'gcloud builds submit' in the same with config directory.
 3) As result of step 2) image of built codebase is published in Artifact Registry (here are some [notes](./notes/gcp_docker.txt) of how to work with GCP Docker Registry) 
+
+### Autotests
+
+Any developing system requires its testing as mandatory activity. Examples of autotests are placed in [autotest](./autotest) folder and written using [Python](https://www.python.org/) programming language.
+See details in [description](./autotest/README.md).
