@@ -1,0 +1,18 @@
+# https://cloud.google.com/sdk/gcloud/reference/topic/gcloudignore
+# exclude non-java related folders and files from Cloud Build source
+
+**/.idea/
+**/.git/
+.gitignore
+Makefile
+README.md
+/autotest/
+/back/
+/data/
+/env/
+/gcp/
+/gcp-terraform/
+/notes/
+/target/
+/postman/
+
