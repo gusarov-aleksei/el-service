@@ -1,0 +1,5 @@
+credentials             = "../../env/gcp/algus-project-382-4c2c24b9861e.json"
+project_id              = "algus-project-382"
+region                  = "us-east1"
+zone                    = "us-east1-b"
+el_service_docker_image = "us-east1-docker.pkg.dev/algus-project-382/algus-docker-repo/el-service:0.1"
