@@ -71,3 +71,48 @@ resource "null_resource" "pack_autotests" {
   source_dir  = "./temp"
   type        = "zip"
 } */
+
+# https://cloud.google.com/functions/docs/
+resource "google_cloudfunctions_function" "function" {
+  name        = "el_service_au_function"
+  description = "El Service autotests"
+  runtime     = "python39"
+
+  available_memory_mb   = 128
+  source_archive_bucket = google_storage_bucket.el_service_autotests.name
+  source_archive_object = google_storage_bucket_object.archive.name
+  timeout = 60
+
+  event_trigger {
+    event_type = "google.pubsub.topic.publish"
+    resource   = "projects/algus-project-382/topics/el-service-autotest-topic"
+  }
+  # keep for example
+  labels = {
+    my-label = "my-label-value"
+  }
+
+  environment_variables = {
+    MY_ENV_VAR = "my-env-var-value"
+  }
+}
+
+resource "google_pubsub_topic" "el_service_autotest" {
+  name = "el-service-autotest-topic"
+}
+
+resource "google_pubsub_subscription" "example" {
+  name    = "el-service-autotest-sub"
+  topic   = google_pubsub_topic.el_service_autotest.name
+}
+
+# IAM entry for all users to invoke the function
+resource "google_cloudfunctions_function_iam_member" "invoker" {
+  project        = google_cloudfunctions_function.function.project
+  region         = google_cloudfunctions_function.function.region
+  cloud_function = google_cloudfunctions_function.function.name
+
+  role   = "roles/cloudfunctions.invoker"
+  # set exact principalEmail, like user account 'user:login@gmail.com' or service account
+  member = "allUsers"
+}
