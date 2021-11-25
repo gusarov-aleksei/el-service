@@ -18,9 +18,9 @@ def get_args():
 
 
 # setup global variables
-def init_global_var():
+def init_global_var(args):
     """Define base global variables"""
-    global_var.args = get_args()
+    global_var.args = args
     print(f"Command line args = {global_var.args}")
     print(f"deploy_type = {global_var.args.deploy_type}")
     global_var.el_service_url = el_service_requests.get_el_service_url(global_var.args.deploy_type)
@@ -35,6 +35,27 @@ def run_tests():
     return result
 
 
-if __name__ == '__main__':
-    init_global_var()
+def el_service_au_function(event, context):
+    """Entry point function called by GCP. Function name is set in Cloud Function config
+
+    Parameters:
+    event : data came from trigger (for example, from Pub-Sub trigger, HTTP trigger, etc)
+    context : some metadata about calling service (for example,
+    {event_id: 587156057, timestamp: 2021-11-24T19:53:00.943Z, event_type:
+    google.pubsub.topic.publish, resource: {'service': 'pubsub.googleapis.com', 'name':
+    'projects/algus-project-382/topics/el-service-autotest-topic'}}) """
+    import argparse
+    args = argparse.Namespace()
+    # because function is called from GCP, create args object and use 'deploy_type' argument with 'all_cloud' value
+    args.__setattr__('deploy_type', 'all_cloud')
+    init_global_var(args)
     run_tests()
+
+
+def main():
+    init_global_var(get_args())
+    run_tests()
+
+
+if __name__ == '__main__':
+    main()
