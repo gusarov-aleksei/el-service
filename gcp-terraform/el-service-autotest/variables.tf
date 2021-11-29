@@ -18,11 +18,6 @@ variable "region" {
   type        = string
 }
 
-variable "el_service_docker_image" {
-  description = "El service docker image placed in Artifactory Registry to deploy"
-  type        = string
-}
-
 variable "au_bucket_location" {
   description = "Storage bucket with autotests source code location"
   type        = string

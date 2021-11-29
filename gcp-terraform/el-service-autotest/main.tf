@@ -1,21 +1,9 @@
-# declare google provider usage for communications with GCP
-provider "google" {
-  credentials = file(var.credentials)
-
-  project = var.project_id
-  region  = var.region
-  zone    = var.zone
-}
 # https://www.terraform.io/docs/language/functions/format.html
+# declare some locals for usability
 locals {
   arch_name     = "autotests.zip"
-  archive_folder = "../"
+  archive_folder = "./el-service-autotest/"
   archive_file   = format("%s%s", local.archive_folder, local.arch_name)
-}
-
-output "path_to_autotests_archive" {
-  description = "Absolute path to autotests archive"
-  value       = abspath(local.archive_file)
 }
 
 # https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/cloudfunctions_function
@@ -43,7 +31,7 @@ resource "google_storage_bucket" "el_service_autotests" {
 resource "google_storage_bucket_object" "archive" {
   name   = local.arch_name
   bucket = google_storage_bucket.el_service_autotests.name
-  source = local.arch_name
+  source = local.archive_file
 
   depends_on = [
     null_resource.pack_autotests,
@@ -56,7 +44,7 @@ resource "null_resource" "pack_autotests" {
 
   provisioner "local-exec" {
     command = join(" && ", [
-      "cd ./../../autotest/",
+      "cd ./../autotest/",
       "zip -r autotests.zip * -x *.idea* *.sh *__pycache__* README.md",
       "mv autotests.zip ./../gcp-terraform/el-service-autotest"
     ])
