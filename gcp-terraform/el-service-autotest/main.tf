@@ -14,7 +14,7 @@ locals {
 }
 
 output "path_to_autotests_archive" {
-  description = "Relative path to autotests archive"
+  description = "Absolute path to autotests archive"
   value       = abspath(local.archive_file)
 }
 
@@ -23,7 +23,7 @@ output "path_to_autotests_archive" {
 # Create bucket for autotests source code
 resource "google_storage_bucket" "el_service_autotests" {
   name          = "el-service-autotests"
-  location      = "US"
+  location      = var.au_bucket_location
   force_destroy = true
 
   uniform_bucket_level_access = true
@@ -64,17 +64,9 @@ resource "null_resource" "pack_autotests" {
   }
 }
 
-/*data "archive_file" "autotest_arch" {
-  depends_on  = [null_resource.pack_autotests]
-
-  output_path = "./au.zip"
-  source_dir  = "./temp"
-  type        = "zip"
-} */
-
 # https://cloud.google.com/functions/docs/
 resource "google_cloudfunctions_function" "function" {
-  name        = "el_service_au_function"
+  name        = var.au_function_name
   description = "El Service autotests"
   runtime     = "python39"
 
@@ -85,7 +77,7 @@ resource "google_cloudfunctions_function" "function" {
 
   event_trigger {
     event_type = "google.pubsub.topic.publish"
-    resource   = "projects/algus-project-382/topics/el-service-autotest-topic"
+    resource   = var.au_function_topic_resource_path
   }
   # keep for example
   labels = {
@@ -98,7 +90,7 @@ resource "google_cloudfunctions_function" "function" {
 }
 
 resource "google_pubsub_topic" "el_service_autotest" {
-  name = "el-service-autotest-topic"
+  name = var.au_function_topic
 }
 
 resource "google_pubsub_subscription" "example" {

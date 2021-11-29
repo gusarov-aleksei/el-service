@@ -22,3 +22,23 @@ variable "el_service_docker_image" {
   description = "El service docker image placed in Artifactory Registry to deploy"
   type        = string
 }
+
+variable "au_bucket_location" {
+  description = "Storage bucket with autotests source code location"
+  type        = string
+}
+
+variable "au_function_name" {
+  description = "Name of entry point Cloud Function (this function is call by Cloud Function trigger)"
+  type        = string
+}
+
+variable "au_function_topic" {
+  description = "Name of Pub/Sub topic consumed by trigger of Cloud Function"
+  type        = string
+}
+
+variable "au_function_topic_resource_path" {
+  description = "Pub/Sub topic resource path in project"
+  type        = string
+}
