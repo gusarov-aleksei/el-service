@@ -23,11 +23,6 @@ variable "el_service_docker_image" {
   type        = string
 }
 
-variable "au_bucket_location" {
-  description = "Storage bucket with autotests source code location"
-  type        = string
-}
-
 variable "au_function_name" {
   description = "Name of entry point Cloud Function (this function is call by Cloud Function trigger)"
   type        = string
@@ -38,7 +33,7 @@ variable "au_function_topic" {
   type        = string
 }
 
-variable "au_function_topic_resource_path" {
-  description = "Pub/Sub topic resource path in project"
-  type        = string
+variable "el_service_bucket_name" {
+  description = "Bucket with main el-service data where pdf file are stored"
+  type = string
 }

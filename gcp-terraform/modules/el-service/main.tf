@@ -33,6 +33,9 @@ module "gce-container" {
   restart_policy = "Always"
 }
 
+/*data "google_service_account" "el_service_account" {
+}*/
+
 # instance template with docker container
 resource "google_compute_instance_template" "el_template" {
   name         = "el-service-vm-template"
@@ -70,4 +73,12 @@ resource "google_compute_instance_group_manager" "el_service_group" {
   }
 
   target_size = 1
+}
+
+# Create bucket used by el-service
+resource "google_storage_bucket" "el_service_data" {
+  name          = var.el_service_bucket_name
+  location      = var.region
+
+  uniform_bucket_level_access = true
 }

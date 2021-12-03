@@ -7,26 +7,21 @@ provider "google" {
   zone    = var.zone
 }
 
-module "el_service" {
-  source = "./el-service"
+module "el_service_au" {
+  source = "./modules/el-service-autotest"
 
-  project_id = var.project_id
   region     = var.region
-  zone       = var.zone
-
-  el_service_docker_image = var.el_service_docker_image
-
+  project_id = var.project_id
+  au_function_name = var.au_function_name
+  au_function_topic = var.au_function_topic
 }
 
-module "el_service_au" {
-  source = "./el-service-autotest"
+module "el_service" {
+  source = "./modules/el-service"
 
-  au_bucket_location              = var.au_bucket_location
-  au_function_name                = var.au_function_name
-  au_function_topic               = var.au_function_topic
-  au_function_topic_resource_path = var.au_function_topic_resource_path
-  credentials                     = var.credentials
-  project_id                      = var.project_id
-  region                          = var.region
-  zone                            = var.zone
+  el_service_docker_image = var.el_service_docker_image
+  project_id              = var.project_id
+  region                  = var.region
+  zone                    = var.zone
+  el_service_bucket_name = var.el_service_bucket_name
 }

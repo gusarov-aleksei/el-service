@@ -1,36 +1,36 @@
-data "google_container_registry_image" "el_service_image" {
-  name = var.el_service_docker_image
+output "el_service_module_output" {
+  value = module.el_service.el_service_module_output
 }
 
-output "gcr_el_service_image" {
-  description = "Reference to el-service Docker image"
-  value = data.google_container_registry_image.el_service_image.image_url
+output "el_service_image" {
+  value = module.el_service.gcr_el_service_image
 }
 
-data "google_compute_instance_group" "el_service_vm_group" {
-  name = "el-service-vm-group"
-  zone = var.zone
+output "el_service_instances" {
+  value = module.el_service.instances
 }
 
-locals {
-  el_service_instances = (data.google_compute_instance_group.el_service_vm_group.instances == null) ? [] : data.google_compute_instance_group.el_service_vm_group.instances
+output "el_service_instance_ip_addresses" {
+  value = module.el_service.instance_public_ip_addresses
 }
 
-output "instances" {
-  description = "A link of the deployed instance"
-  value = local.el_service_instances
+output "au_source_dir_rel_output" {
+  value = module.el_service_au.au_source_dir_rel_output
 }
 
-data "google_compute_instance" "el_service_vm_instances" {
-  for_each = local.el_service_instances
-  self_link = each.key
-  zone = var.zone
+output "au_source_dir_abs_output" {
+  value = module.el_service_au.au_source_dir_abs_output
 }
 
-output "instance_public_ip_addresses" {
-  description = "Public IP address of the deployed vm instances"
-  value = {
-      for instance in data.google_compute_instance.el_service_vm_instances:
-      instance.name => instance.network_interface.0.access_config.0.nat_ip
-  }
+output "au_module_output" {
+  value =  module.el_service_au.au_module_output
+}
+
+output "tf_root_path" {
+  description = "Terraform folder absolut path"
+  value = path.cwd
+}
+
+output "au_source_blob_name_output" {
+  value = module.el_service_au.au_source_blob_name_output
 }

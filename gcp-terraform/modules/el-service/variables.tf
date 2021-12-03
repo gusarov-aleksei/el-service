@@ -17,3 +17,9 @@ variable "el_service_docker_image" {
   description = "El service docker image placed in Artifactory Registry to deploy"
   type = string
 }
+
+variable "el_service_bucket_name" {
+  description = "Bucket with main el-service data where pdf file are stored"
+  type = string
+  # default = "algus-bucket"
+}

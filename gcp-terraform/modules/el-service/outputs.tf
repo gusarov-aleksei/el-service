@@ -34,3 +34,8 @@ output "instance_public_ip_addresses" {
       instance.name => instance.network_interface.0.access_config.0.nat_ip
   }
 }
+
+output "el_service_module_output" {
+  description = "Output module path"
+  value = path.module
+}
