@@ -10,9 +10,9 @@ provider "google" {
 module "el_service_au" {
   source = "./modules/el-service-autotest"
 
-  region     = var.region
-  project_id = var.project_id
-  au_function_name = var.au_function_name
+  region            = var.region
+  project_id        = var.project_id
+  au_function_name  = var.au_function_name
   au_function_topic = var.au_function_topic
 }
 
@@ -23,5 +23,5 @@ module "el_service" {
   project_id              = var.project_id
   region                  = var.region
   zone                    = var.zone
-  el_service_bucket_name = var.el_service_bucket_name
+  el_service_bucket_name  = var.el_service_bucket_name
 }

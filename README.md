@@ -23,14 +23,14 @@ Here is short description:
 - operations on files with [StorageService](./src/main/java/org/example/storage/StorageService.java)
 - text extraction from files with [EnglishContentService](./src/main/java/org/example/service/EnglishContentService.java)
 - HTTP-access through [EnglishContentResource](./src/main/java/org/example/rest/EnglishContentResource.java), [FileManagerResource](./src/main/java/org/example/rest/FileManagerResource.java)
-- ability to deploy into [GCP](https://cloud.google.com/) using Compute Engine, Cloud Storage, Cloud Build, Artifact Registry
+- ability to deploy into [GCP](https://cloud.google.com/) using Compute Engine, Cloud Storage, Cloud Build, Artifact Registry, Pub/Sub, Cloud Function(used for a [Autotests](#autotests) running)
 
 ### How to build and deploy
 
 #### Tools
 Working with GCP is possible using different approaches, for example:
 - [Scripts](./gcp) of command line interface [gcloud](https://cloud.google.com/sdk/gcloud)
-- [Terraform](https://www.terraform.io/) infrastructure tool (see directory with [config](./gcp-terraform))
+- IaaC with [Terraform](https://www.terraform.io/) approach defined in [gcp-terraform](./gcp-terraform)
 
 #### Building
 Here is basic flow of [Docker](https://www.docker.com/) image preparation:

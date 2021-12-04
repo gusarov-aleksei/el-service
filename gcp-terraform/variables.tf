@@ -35,5 +35,5 @@ variable "au_function_topic" {
 
 variable "el_service_bucket_name" {
   description = "Bucket with main el-service data where pdf file are stored"
-  type = string
+  type        = string
 }

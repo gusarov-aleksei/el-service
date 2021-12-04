@@ -23,12 +23,12 @@ output "au_source_dir_abs_output" {
 }
 
 output "au_module_output" {
-  value =  module.el_service_au.au_module_output
+  value = module.el_service_au.au_module_output
 }
 
 output "tf_root_path" {
   description = "Terraform folder absolut path"
-  value = path.cwd
+  value       = path.cwd
 }
 
 output "au_source_blob_name_output" {
