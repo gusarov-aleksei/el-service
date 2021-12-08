@@ -33,6 +33,11 @@ variable "au_function_topic" {
   type        = string
 }
 
+variable "au_source_relative_path" {
+  description = "Autotests source code relative path (root directory is 'gcp-terraform')"
+  type        = string
+}
+
 variable "el_service_bucket_name" {
   description = "Bucket with main el-service data where pdf file are stored"
   type        = string

@@ -81,4 +81,8 @@ resource "google_storage_bucket" "el_service_data" {
   location      = var.region
 
   uniform_bucket_level_access = true
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }

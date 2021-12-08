@@ -10,3 +10,4 @@ el_service_bucket_name  = "algus-bucket"
 # module.el-service-autotests inputs:
 au_function_name  = "el_service_au_function"
 au_function_topic = "el-service-autotest-topic"
+au_source_relative_path = "../autotest"
