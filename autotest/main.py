@@ -25,6 +25,7 @@ def init_global_var(args):
     print(f"deploy_type = {global_var.args.deploy_type}")
     global_var.el_service_url = el_service_requests.get_el_service_url(global_var.args.deploy_type)
     print(f"global variable el_service_url = {global_var.el_service_url}")
+    global_var.files_test_data = el_service_requests.create_files_data_request(global_var.args.deploy_type)
 
 
 def run_tests():

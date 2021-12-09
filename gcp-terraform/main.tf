@@ -12,7 +12,7 @@ module "el_service_au_static" {
   au_source_relative_path = var.au_source_relative_path
   region = var.region
 
-  count = 1
+  count = 0
 }
 
 module "el_service_au" {

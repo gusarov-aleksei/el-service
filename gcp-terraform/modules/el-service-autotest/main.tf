@@ -8,10 +8,9 @@ data "archive_file" "au_source_zip" {
   type        = "zip"
   output_path = "${path.module}/${local.au_arch_name}"
   source_dir = local.au_source_dir
-  excludes = [".idea", "__pycache__", "README.md","*.sh"]
+  excludes = [".idea", "__pycache__", "README.md","*.sh", "data"]
 }
 # TODO add calculation to au.zip file name
-# TODO exclude pdf files from au.zip and move pdfs to storage
 
 # another approach of packing
 /*

@@ -83,6 +83,6 @@ resource "google_storage_bucket" "el_service_data" {
   uniform_bucket_level_access = true
 
   lifecycle {
-    prevent_destroy = true
+    prevent_destroy = false
   }
 }

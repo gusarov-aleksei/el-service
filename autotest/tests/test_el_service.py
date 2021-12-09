@@ -10,7 +10,8 @@ class ElServiceTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.url = global_var.el_service_url
-        cls.el_service_facade = el_service_requests.ElServiceFacade(cls.url)
+        cls.files_test_data = global_var.files_test_data
+        cls.el_service_facade = el_service_requests.ElServiceFacade(cls.url, cls.files_test_data)
 
     def test_health_check(self):
         # when
@@ -78,3 +79,5 @@ class ElServiceTest(unittest.TestCase):
         # print(json.dumps(response_body, indent=2))
         # clean up
         self.el_service_facade.delete_files()
+
+    # TODO delete remote files after all tests
