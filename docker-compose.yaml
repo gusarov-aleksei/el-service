@@ -1,0 +1,21 @@
+version: "3.9"
+services:
+  postgres:
+    container_name: el-data-pg
+    image: postgres:14.1
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=el_data
+    volumes:
+      - EL_DATA_PG:/var/lib/postgresql/data
+      - ./db.postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+    logging:
+      options:
+        max-size: 10m
+        max-file: "3"
+    ports:
+      - 5432:5432
+volumes:
+  EL_DATA_PG:

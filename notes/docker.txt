@@ -22,3 +22,6 @@ docker logs -f <container_id>
 
 Restart container and pass env
 docker restart <container_id>
+
+Remove docker volume named 'empty_EL_DATA_PG' (stop and remove docker container before)
+docker volume rm empty_EL_DATA_PG
