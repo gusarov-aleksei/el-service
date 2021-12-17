@@ -21,6 +21,9 @@
         <maven.compiler.parameters>true</maven.compiler.parameters>
         <assertj-core.version>3.20.2</assertj-core.version>
         <gcp.version>22.0.0</gcp.version>
+        <jooq.version>3.15.5</jooq.version>
+        <skip.jooq.generation>false</skip.jooq.generation>
+        <jdbc-postgress.version>42.3.1</jdbc-postgress.version>
     </properties>
 
     <dependencyManagement>
@@ -120,6 +123,26 @@
             <groupId>com.google.cloud</groupId>
             <artifactId>google-cloud-nio</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.jooq</groupId>
+            <artifactId>jooq</artifactId>
+            <version>${jooq.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jooq</groupId>
+            <artifactId>jooq-meta</artifactId>
+            <version>${jooq.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jooq</groupId>
+            <artifactId>jooq-codegen</artifactId>
+            <version>${jooq.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>${jdbc-postgress.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -150,6 +173,26 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.jooq</groupId>
+                <artifactId>jooq-codegen-maven</artifactId>
+                <version>3.15.5</version>
+
+                <executions>
+                    <execution>
+                        <!-- mvn org.jooq:jooq-codegen-maven:generate -->
+                        <id>jooq-codegen</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <skip>${skip.jooq.generation}</skip>
+                    <configurationFile>src/main/resources/jooqCodeGen.xml</configurationFile>
+                </configuration>
             </plugin>
         </plugins>
     </build>

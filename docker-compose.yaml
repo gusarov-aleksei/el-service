@@ -1,13 +1,13 @@
 version: "3.9"
 services:
   postgres:
-    container_name: el-data-pg
+    container_name: postgres
     image: postgres:14.1
     restart: always
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=el_data
+      - POSTGRES_DB=postgres
     volumes:
       - EL_DATA_PG:/var/lib/postgresql/data
       - ./db.postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
