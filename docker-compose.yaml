@@ -10,7 +10,6 @@ services:
       - POSTGRES_DB=postgres
     volumes:
       - EL_DATA_PG:/var/lib/postgresql/data
-      - ./db.postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
     logging:
       options:
         max-size: 10m

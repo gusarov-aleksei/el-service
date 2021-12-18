@@ -9,6 +9,7 @@
     <version>1.0-SNAPSHOT</version>
 
     <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
         <quarkus-plugin.version>2.1.2.Final</quarkus-plugin.version>
@@ -23,6 +24,7 @@
         <gcp.version>22.0.0</gcp.version>
         <jooq.version>3.15.5</jooq.version>
         <skip.jooq.generation>false</skip.jooq.generation>
+        <skip.flyway.generation>false</skip.flyway.generation>
         <jdbc-postgress.version>42.3.1</jdbc-postgress.version>
     </properties>
 
@@ -148,6 +150,54 @@
     <build>
         <plugins>
             <plugin>
+                <groupId>org.flywaydb</groupId>
+                <artifactId>flyway-maven-plugin</artifactId>
+                <version>3.0</version>
+                <!-- Note that we're executing the Flyway plugin in the "generate-sources" phase -->
+                <executions>
+                    <execution>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>migrate</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <!-- Note that we need to prefix the db/migration path with filesystem: to prevent Flyway
+                from looking for our migration scripts only on the classpath -->
+                <configuration>
+                    <skip>${skip.flyway.generation}</skip>
+                    <url>jdbc:postgresql:postgres</url>
+                    <user>postgres</user>
+                    <password>postgres</password>
+                    <schemas>
+                        <schema>el_service</schema>
+                    </schemas>
+                    <locations>
+                        <location>filesystem:src/main/resources/db/migration</location>
+                    </locations>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.jooq</groupId>
+                <artifactId>jooq-codegen-maven</artifactId>
+                <version>3.15.5</version>
+
+                <executions>
+                    <execution>
+                        <!-- mvn org.jooq:jooq-codegen-maven:generate -->
+                        <id>jooq-codegen</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <skip>${skip.jooq.generation}</skip>
+                    <configurationFile>src/main/resources/jooqCodeGen.xml</configurationFile>
+                </configuration>
+            </plugin>
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>${compiler-plugin.version}</version>
@@ -175,24 +225,9 @@
                 </executions>
             </plugin>
             <plugin>
-                <groupId>org.jooq</groupId>
-                <artifactId>jooq-codegen-maven</artifactId>
-                <version>3.15.5</version>
-
-                <executions>
-                    <execution>
-                        <!-- mvn org.jooq:jooq-codegen-maven:generate -->
-                        <id>jooq-codegen</id>
-                        <phase>generate-sources</phase>
-                        <goals>
-                            <goal>generate</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <skip>${skip.jooq.generation}</skip>
-                    <configurationFile>src/main/resources/jooqCodeGen.xml</configurationFile>
-                </configuration>
+                <groupId>io.github.git-commit-id</groupId>
+                <artifactId>git-commit-id-maven-plugin</artifactId>
+                <version>5.0.0</version>
             </plugin>
         </plugins>
     </build>
