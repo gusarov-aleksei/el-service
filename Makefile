@@ -17,3 +17,9 @@ tf-refresh:
 	cd gcp-terraform; terraform refresh;
 tests:
 	cd autotest && python tests.py
+build-fast:
+	mvn clean install -Dmaven.test.skip=true
+migrate:
+	mvn org.flywaydb:flyway-maven-plugin:migrate
+generate:
+	mvn org.jooq:jooq-codegen-maven:generate
