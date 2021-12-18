@@ -19,7 +19,7 @@
             </excludes>
         </database>
         <target>
-            <packageName>org.example.dao.model</packageName>
+            <packageName>org.example.dao.jooq.model</packageName>
             <directory>src/main/java</directory>
         </target>
     </generator>

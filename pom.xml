@@ -23,8 +23,8 @@
         <assertj-core.version>3.20.2</assertj-core.version>
         <gcp.version>22.0.0</gcp.version>
         <jooq.version>3.15.5</jooq.version>
-        <skip.jooq.generation>false</skip.jooq.generation>
-        <skip.flyway.generation>false</skip.flyway.generation>
+        <skip.jooq.generation>true</skip.jooq.generation>
+        <skip.flyway.generation>true</skip.flyway.generation>
         <jdbc-postgress.version>42.3.1</jdbc-postgress.version>
     </properties>
 
