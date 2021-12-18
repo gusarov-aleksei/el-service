@@ -14,7 +14,9 @@
             <name>org.jooq.meta.postgres.PostgresDatabase</name>
             <inputSchema>el_service</inputSchema>
             <includes>.*</includes>
-            <excludes></excludes>
+            <excludes>
+                schema_version
+            </excludes>
         </database>
         <target>
             <packageName>org.example.dao.model</packageName>
