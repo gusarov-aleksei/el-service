@@ -23,9 +23,25 @@ import static org.example.dao.jooq.model.tables.Podcast.PODCAST;
  * Simple example of jooq usage
  */
 public class EnglishContentDaoExample implements EnglishContentDao {
-    private String userName = "postgres";
-    private String password = "postgres";
-    private String url = "jdbc:postgresql:postgres";
+
+    final private String userName;
+    final private String password;
+    final private String url;
+
+    public EnglishContentDaoExample(String userName, String password, String url) {
+        this.userName = userName;
+        this.password = password;
+        this.url = url;
+    }
+
+    /**
+     * Constructor with very default parameters
+     */
+    public EnglishContentDaoExample() {
+        this.userName = "postgres";
+        this.password = "postgres";
+        this.url = "jdbc:postgresql:postgres";
+    }
 
     @Override
     public int create(EnglishContent content) {

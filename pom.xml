@@ -26,6 +26,8 @@
         <skip.jooq.generation>true</skip.jooq.generation>
         <skip.flyway.generation>true</skip.flyway.generation>
         <jdbc-postgress.version>42.3.1</jdbc-postgress.version>
+        <testcontainers-postgres.version>1.16.2</testcontainers-postgres.version>
+        <flywaydb.version>8.2.3</flywaydb.version>
     </properties>
 
     <dependencyManagement>
@@ -144,6 +146,23 @@
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <version>${jdbc-postgress.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>${testcontainers-postgres.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>${testcontainers-postgres.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
+            <version>${flywaydb.version}</version>
         </dependency>
     </dependencies>
 
