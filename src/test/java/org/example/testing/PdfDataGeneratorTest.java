@@ -1,6 +1,6 @@
 package org.example.testing;
 
-import org.example.esl.EnglishContent;
+import org.example.esl.api.EnglishContent;
 import org.example.pdf.ResourceLoader;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;

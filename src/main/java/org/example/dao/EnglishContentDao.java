@@ -1,6 +1,6 @@
 package org.example.dao;
 
-import org.example.esl.EnglishContent;
+import org.example.esl.api.EnglishContent;
 
 import java.util.Optional;
 

@@ -1,4 +1,4 @@
-package org.example.esl;
+package org.example.esl.api;
 
 import java.util.Map;
 
@@ -38,5 +38,15 @@ public class EnglishContent {
 
     public void setMetadata(Map<String, String> metadata) {
         this.metadata = metadata;
+    }
+
+    @Override
+    public String toString() {
+        return "EnglishContent{" +
+                "metadata=" + metadata +
+                ", glossary=" + glossary +
+                ", whatElse=" + whatElse +
+                ", cultureNotes='" + cultureNotes + '\'' +
+                '}';
     }
 }

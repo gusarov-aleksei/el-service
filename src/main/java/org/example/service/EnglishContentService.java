@@ -1,6 +1,6 @@
 package org.example.service;
 
-import org.example.esl.EnglishContent;
+import org.example.esl.api.EnglishContent;
 import org.example.esl.EnglishContentExtractor;
 import org.example.file.FileOps;
 import org.example.pdf.PdfAdapter;

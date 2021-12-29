@@ -1,5 +1,7 @@
 package org.example.esl;
 
+import org.example.esl.api.EnglishContent;
+
 import java.util.Map;
 import java.util.Optional;
 

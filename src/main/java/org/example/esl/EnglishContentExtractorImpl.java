@@ -1,5 +1,7 @@
 package org.example.esl;
 
+import org.example.esl.api.EnglishContent;
+
 import javax.inject.Singleton;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
