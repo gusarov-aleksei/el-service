@@ -10,4 +10,6 @@ public interface EnglishContentDao {
 
     Optional<EnglishContent> getById(int id);
 
+    Optional<EnglishContent> fetchByFileName(String fileName);
+
 }

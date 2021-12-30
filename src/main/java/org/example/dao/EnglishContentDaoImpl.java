@@ -24,7 +24,7 @@ import static org.example.dao.jooq.model.tables.Podcast.PODCAST;
 /**
  * Simple example of jooq usage
  */
-public class EnglishContentDaoExample implements EnglishContentDao {
+public class EnglishContentDaoImpl implements EnglishContentDao {
 
     final private String userName;
     final private String password;
@@ -34,7 +34,7 @@ public class EnglishContentDaoExample implements EnglishContentDao {
     final static String WHAT_ELSE = "whatElse";
     final static String CULTURE = "cultureNotes";
 
-    public EnglishContentDaoExample(String userName, String password, String url) {
+    public EnglishContentDaoImpl(String userName, String password, String url) {
         this.userName = userName;
         this.password = password;
         this.url = url;
@@ -43,7 +43,7 @@ public class EnglishContentDaoExample implements EnglishContentDao {
     /**
      * Constructor with very default parameters
      */
-    public EnglishContentDaoExample() {
+    public EnglishContentDaoImpl() {
         this.userName = "postgres";
         this.password = "postgres";
         this.url = "jdbc:postgresql:postgres";
@@ -80,23 +80,36 @@ public class EnglishContentDaoExample implements EnglishContentDao {
             var context = DSL.using(conn, SQLDialect.POSTGRES);
             var record = context.select().from(PODCAST)
                     .where(PODCAST.ID.eq((short) id)).fetchOne();
-            if (record == null) {
-                return Optional.empty();
-            } else {
-                return Optional.of(convertRecordToContent(record));
-            }
+            return convertRecordToContent(record);
         } catch (SQLException | IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    private EnglishContent convertRecordToContent(Record record) throws JsonProcessingException {
+    private Optional<EnglishContent> convertRecordToContent(Record record) throws JsonProcessingException {
+        if (record == null) {
+            return Optional.empty();
+        }
         EnglishContent content = new EnglishContent();
         content.setMetadata(mapper.readValue(record.getValue(PODCAST.METADATA).data(), Map.class));
         var map = mapper.readValue(record.getValue(PODCAST.BODY).data(), Map.class);
         content.setGlossary((Map<String, String>) map.get(GLOSSARY));
         content.setWhatElse((Map<String, String>) map.get(WHAT_ELSE));
         content.setCultureNotes((String) map.get(CULTURE));
-        return content;
+        return Optional.of(content);
+    }
+
+    @Override
+    public Optional<EnglishContent> fetchByFileName(String fileName) {
+        try (Connection conn = DriverManager.getConnection(url, userName, password)) {
+            var records = DSL.using(conn, SQLDialect.POSTGRES)
+                    .select().from(PODCAST)
+                    .where("json_extract_path_text(metadata::json, 'filename') = '" + fileName +"'")
+                    .limit(1)
+                    .fetch();
+            return convertRecordToContent(records.get(0));
+        } catch (SQLException | JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

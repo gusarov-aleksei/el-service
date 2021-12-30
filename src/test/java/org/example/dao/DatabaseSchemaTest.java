@@ -24,7 +24,7 @@ public class DatabaseSchemaTest extends AbstractDatabaseTest {
 
     @Test
     void testTableNames_shouldContainsTablesDefinedNames() {
-        try (Connection conn = DriverManager.getConnection(dbContainer.getJdbcUrl(), USER_NAME, USER_PASSWORD)) {
+        try (Connection conn = DriverManager.getConnection(url, USER_NAME, USER_PASSWORD)) {
             var schema = retrieveSchema(conn , "el_service");
 
             assertThat(schema).isPresent();
@@ -44,7 +44,7 @@ public class DatabaseSchemaTest extends AbstractDatabaseTest {
 
     @Test
     void testPodcastTableFields_shouldContainsFieldsWithDefinedType() {
-        try (Connection conn = DriverManager.getConnection(dbContainer.getJdbcUrl(), USER_NAME, USER_PASSWORD)) {
+        try (Connection conn = DriverManager.getConnection(url, USER_NAME, USER_PASSWORD)) {
             var schema = retrieveSchema(conn , "el_service");
 
             assertThat(schema).isPresent();
