@@ -12,4 +12,6 @@ public interface EnglishContentDao {
 
     Optional<EnglishContent> fetchByFileName(String fileName);
 
+    int delete(int id);
+
 }

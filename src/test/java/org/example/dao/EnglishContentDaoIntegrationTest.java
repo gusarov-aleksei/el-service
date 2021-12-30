@@ -94,4 +94,28 @@ public class EnglishContentDaoIntegrationTest extends AbstractDatabaseTest {
         assertThat(englishContentDao.fetchByFileName("test_not_existing_file.pdf")).isEmpty();
     }
 
+    @Test
+    void testDelete_shouldDeleteRecord_whenRecordExistsInDatabase() {
+        // when record exists in DB
+        var englishContent = new EnglishContent();
+        englishContent.setMetadata(Map.of("key1", "value1", "filename", "test1.pdf"));
+        englishContent.setGlossary(Map.of("word1", "description1"));
+        var id = englishContentDao.create(englishContent);
+        // then delete operation removes one record
+        var deletedRecords = englishContentDao.delete(id);
+        // delete api returns amount of deleted records
+        assertThat(deletedRecords).isEqualTo(1);
+        // record created at "when" step has deleted now
+        assertThat(englishContentDao.getById(id)).isEmpty();
+    }
+
+    @Test
+    void testDelete_shouldNotDeleteRecord_whenRecordDoesNotExist() {
+        // no records exist in DB
+        // then delete operation removes one record
+        var deletedRecords = englishContentDao.delete(100501);
+        // delete api returns 0 of deleted records
+        assertThat(deletedRecords).isEqualTo(0);
+    }
+
 }

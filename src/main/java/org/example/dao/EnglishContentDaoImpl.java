@@ -112,4 +112,16 @@ public class EnglishContentDaoImpl implements EnglishContentDao {
             throw new RuntimeException(e);
         }
     }
+
+    @Override
+    public int delete(int id) {
+        try (Connection conn = DriverManager.getConnection(url, userName, password)) {
+            return DSL.using(conn, SQLDialect.POSTGRES)
+                    .delete(PODCAST)
+                    .where(PODCAST.ID.eq((short) id))
+                    .execute();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
