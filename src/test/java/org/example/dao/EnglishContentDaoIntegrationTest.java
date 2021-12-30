@@ -32,7 +32,8 @@ public class EnglishContentDaoIntegrationTest extends AbstractDatabaseTest {
     }
 
     @Test
-    void validateDao() {
+    void testCreate_shouldCreateNewRecordInDatabase_whenMethodCreateIsCalled() {
+        // this test validates create and getById operations
         var englishContent = new EnglishContent();
         englishContent.setMetadata(Map.of("key1", "value1"));
         englishContent.setGlossary(Map.of("word1", "description1","word2", "description2"));
@@ -46,6 +47,15 @@ public class EnglishContentDaoIntegrationTest extends AbstractDatabaseTest {
         assertThat(contentFromDB.get().getMetadata()).isNotNull().containsEntry("key1", "value1");
         assertThat(contentFromDB.get().getGlossary()).isNotNull().containsExactlyInAnyOrderEntriesOf(Map.of("word1", "description1","word2", "description2"));
         assertThat(contentFromDB.get().getWhatElse()).isNotNull().containsEntry("term1", "another one explanation");
+    }
+
+    @Test
+    void testGetById_shouldRetrieveNothing_whenRecordWithIdDoesNotExistInDatabase() {
+        assertThat(englishContentDao.getById(100500)).isEmpty();
+        // create any record
+        englishContentDao.create(new EnglishContent());
+        // and try to get not existing again
+        assertThat(englishContentDao.getById(100500)).isEmpty();
     }
 
     @Test
@@ -73,7 +83,15 @@ public class EnglishContentDaoIntegrationTest extends AbstractDatabaseTest {
         assertThat(contentFromDB2).isPresent();
         assertThat(contentFromDB2.get().getGlossary()).isNotNull()
                 .containsEntry("word2", "description2");
+    }
 
+    @Test
+    void testFetchByFileName_shouldRetrieveNothing_whenRecordDoesNotExistInDatabase() {
+        assertThat(englishContentDao.fetchByFileName("test_not_existing_file.pdf")).isEmpty();
+        // create any record
+        englishContentDao.create(new EnglishContent());
+        // and try to get not existing again
+        assertThat(englishContentDao.fetchByFileName("test_not_existing_file.pdf")).isEmpty();
     }
 
 }

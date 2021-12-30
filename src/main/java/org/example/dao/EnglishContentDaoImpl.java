@@ -102,12 +102,12 @@ public class EnglishContentDaoImpl implements EnglishContentDao {
     @Override
     public Optional<EnglishContent> fetchByFileName(String fileName) {
         try (Connection conn = DriverManager.getConnection(url, userName, password)) {
-            var records = DSL.using(conn, SQLDialect.POSTGRES)
+            var record = DSL.using(conn, SQLDialect.POSTGRES)
                     .select().from(PODCAST)
                     .where("json_extract_path_text(metadata::json, 'filename') = '" + fileName +"'")
                     .limit(1)
-                    .fetch();
-            return convertRecordToContent(records.get(0));
+                    .fetchOne();
+            return convertRecordToContent(record);
         } catch (SQLException | JsonProcessingException e) {
             throw new RuntimeException(e);
         }
