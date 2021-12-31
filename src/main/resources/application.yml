@@ -1,6 +1,6 @@
 storage:
   source:
-    directory: ${LOCAL_SOURCE_DIR}/
+    directory: ${LOCAL_SOURCE_DIR:${USERPROFILE:${HOME}}/esl}/
     extension: ${FILE_EXT:.pdf}
   type: ${STORAGE_TYPE:LOCAL}
   gs:
@@ -14,6 +14,13 @@ quarkus:
         level: DEBUG
   package:
     type: uber-jar
+  datasource:
+    db-kind: postgresql
+    username: postgres
+    password: postgres
+    jdbc:
+      url: jdbc:postgresql:postgres
+      max-size: 8
 
 "%dev":
   quarkus:

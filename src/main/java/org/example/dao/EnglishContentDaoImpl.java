@@ -11,6 +11,7 @@ import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
 import org.jooq.tools.json.JSONObject;
 
+import javax.inject.Singleton;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -24,6 +25,7 @@ import static org.example.dao.jooq.model.tables.Podcast.PODCAST;
 /**
  * Simple example of jooq usage
  */
+@Singleton
 public class EnglishContentDaoImpl implements EnglishContentDao {
 
     final private String userName;

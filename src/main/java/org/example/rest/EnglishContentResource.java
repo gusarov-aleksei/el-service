@@ -44,4 +44,14 @@ public class EnglishContentResource implements ResponseGenerator {
         }
         return Response.ok(pdfService.extractContent(fileName)).build();
     }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("persist")
+    public Response persistContent(@NotNull @QueryParam("fileName") String fileName) throws IOException {
+        if (fileName == null || fileName.isBlank()) {
+            return badFileNameRequested();
+        }
+        return Response.ok(pdfService.persistContent(fileName)).build();
+    }
 }

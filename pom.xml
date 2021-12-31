@@ -84,6 +84,10 @@
             <artifactId>rest-assured</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-jdbc-postgresql</artifactId>
+        </dependency>
         <!-- https://mvnrepository.com/artifact/org.apache.pdfbox/pdfbox -->
         <dependency>
             <groupId>org.apache.pdfbox</groupId>

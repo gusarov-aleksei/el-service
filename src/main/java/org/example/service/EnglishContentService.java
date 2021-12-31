@@ -1,5 +1,6 @@
 package org.example.service;
 
+import org.example.dao.EnglishContentDao;
 import org.example.esl.api.EnglishContent;
 import org.example.esl.EnglishContentExtractor;
 import org.example.file.FileOps;
@@ -27,6 +28,9 @@ public class EnglishContentService implements FileOps {
     @Inject
     StorageService storageService;
 
+    @Inject
+    EnglishContentDao englishContentDao;
+
     private final PdfAdapter pdfAdapter = new PdfAdapter();
     @Inject
     EnglishContentExtractor englishContentExtractor;
@@ -52,5 +56,15 @@ public class EnglishContentService implements FileOps {
                 .flatMap(englishContentExtractor::extractEscContent);
         opContent.ifPresent(content -> content.setMetadata(fileData.metadata));
         return opContent;
+    }
+
+    /**
+     * Retrieve english content from file and persist it into DB
+     * @param fileName file with raw data
+     * @throws IOException any error of IO
+     */
+    public int persistContent(String fileName) throws IOException {
+        var result = extractContent(fileName);
+        return result.map(englishContentDao::create).orElse(-1);
     }
 }
