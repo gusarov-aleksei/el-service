@@ -21,6 +21,11 @@ public class QuarkusLifeCycle {
         Config config = getConfig();
         validateGoogleStorageConfig(config);
         validateLocalStorageConfig(config);
+        printDaoConfig(config);
+    }
+
+    private void printDaoConfig(Config config) {
+        LOGGER.info("Datasource url is '{}'", config.getValue("quarkus.datasource.jdbc.url", String.class));
     }
 
     private void validateLocalStorageConfig(Config config) {

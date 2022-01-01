@@ -25,7 +25,6 @@ import static org.example.dao.jooq.model.tables.Podcast.PODCAST;
 /**
  * Simple example of jooq usage
  */
-@Singleton
 public class EnglishContentDaoImpl implements EnglishContentDao {
 
     final private String userName;
